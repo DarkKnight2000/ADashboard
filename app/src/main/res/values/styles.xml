@@ -18,11 +18,15 @@
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
     <style name="DarkTheme" parent="AppTheme">
-        <item name="textColor">#ffffff</item>
-        <item name="metaTextColor">#aeaeae</item>
-        <item name="bgColor">#333333</item>
-        <item name="colorPrimary">#333333</item>
-        <item name="colorPrimaryDark">#111111</item>
+        <!-- <item name="android:textColor">@color/myText</item>
+        <item name="android:windowBackground">@color/myPrimary</item>
+        <item name="colorPrimary">@color/myPrimary</item>
+        <item name="colorPrimaryDark">@color/myPrimaryDark</item>
+        <item name="colorAccent">@color/myAccent</item>
+        <item name="android:backgroundTint">@color/myPrimary</item> -->
+        <item name="colorPrimary">@color/myAccent</item>
+        <item name="colorPrimaryDark">@color/myAccentDark</item>
+        <item name="colorAccent">@color/myAccent</item>
     </style>
 
 </resources>

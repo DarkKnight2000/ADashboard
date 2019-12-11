@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp">
+
+
+        <CalendarView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/calendarTT"
+            >
+
+        </CalendarView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewClassesDay"
+            android:layout_below="@id/calendarTT"
+            android:layout_marginTop="40dp"
+            />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/testCalendar"
+            android:text="Test"
+            android:layout_below="@id/recyclerViewClassesDay"/>
+
+
+    </RelativeLayout>
+</ScrollView>

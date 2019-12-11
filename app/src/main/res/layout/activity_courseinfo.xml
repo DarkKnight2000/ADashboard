@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:theme="@style/DarkTheme">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10sp">
+
+        <TextView
+            android:text="Course Name"
+            android:layout_width="257dp"
+            android:layout_height="wrap_content" android:id="@+id/textView"
+            android:textSize="15sp"
+            android:textStyle="bold"
+
+
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView2" android:hint="Name"
+            android:textSize="25sp"
+            android:layout_below="@id/textView"
+            />
+        <TextView
+            android:text="Course Code"
+            android:layout_width="257dp"
+            android:layout_height="wrap_content" android:id="@+id/textView4"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:paddingTop="20dp"
+            android:layout_below="@id/textView2"
+
+
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView3"
+            android:hint="Code"
+            android:textSize="25sp"
+            android:layout_below="@id/textView4"
+            />
+
+        <TextView
+            android:text="Default Slot"
+            android:layout_width="257dp"
+            android:layout_height="wrap_content" android:id="@+id/textView5"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:paddingLeft="200dp"
+            android:layout_alignTop="@id/textView4"
+
+
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" android:id="@+id/textView6" android:hint="Slot"
+            android:textSize="25sp"
+            android:paddingLeft="200dp"
+            android:layout_alignTop="@id/textView3"
+
+            />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/recyclerViewClasses"
+            android:layout_below="@id/textView6"
+            android:layout_marginTop="40dp"
+            />
+
+
+        <androidx.cardview.widget.CardView android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/dayModeSelector"
+            android:layout_marginTop="40dp"
+            android:id="@+id/clsEditor"
+            app:cardCornerRadius="10dp"
+
+
+
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="20dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Date"
+                    android:textStyle="bold"
+                    android:id="@+id/extraClsDateLabel"
+                    android:padding="10dp"
+                    />
+                <Spinner
+                    android:id="@+id/daySpinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/extraClsDateLabel"
+                    android:layout_alignStart="@id/startTime"
+                    android:layout_alignTop="@id/extraClsDateLabel"
+                    android:padding="10dp"
+
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick Date"
+                    android:layout_toEndOf="@id/extraClsDateLabel"
+                    android:layout_alignStart="@id/startTime"
+                    android:id="@+id/dateSelector"
+                    android:padding="10dp"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Start time"
+                    android:textStyle="bold"
+                    android:layout_below="@id/extraClsDateLabel"
+                    android:id="@+id/startLabel"
+                    android:padding="10dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick time"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@id/startLabel"
+                    android:layout_below="@id/extraClsDateLabel"
+                    android:onClick="showTimePickerDialogS"
+                    android:id="@+id/startTime"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="End time"
+                    android:textStyle="bold"
+                    android:layout_below="@id/startLabel"
+                    android:id="@+id/endLabel"
+                    android:padding="10dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Pick time"
+                    android:padding="10dp"
+                    android:layout_toRightOf="@id/endLabel"
+                    android:layout_alignLeft="@id/startTime"
+                    android:layout_below="@id/startLabel"
+                    android:onClick="showTimePickerDialogE"
+                    android:id="@+id/endTime"/>
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/endLabel"
+                    android:id="@+id/roomName"
+                    android:hint="Room"
+                    />
+
+                <Button
+
+                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:text="Add Class"
+                    android:id="@+id/btnAddCls"
+                    android:layout_below="@id/roomName"
+
+                    />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <Button
+
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_below="@id/clsEditor"
+            android:text="Update"
+            android:layout_marginTop="30dp"
+            android:id="@+id/btnCommit"
+            />
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tooltipText="@string/app_name"
+            android:layout_below="@id/recyclerViewClasses"
+            android:id="@+id/dayModeSelector">
+
+            <RadioButton
+                android:id="@+id/dateMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Specific Date"
+                android:checked="true" />
+
+            <RadioButton
+                android:id="@+id/weekly"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text= "Weekly"
+                />
+
+        </RadioGroup>
+
+
+    </RelativeLayout>
+</ScrollView>

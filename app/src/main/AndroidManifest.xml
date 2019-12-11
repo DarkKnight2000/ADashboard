@@ -11,15 +11,18 @@
         android:supportsRtl="true"
         android:theme="@style/DarkTheme">
         <activity
-            android:name=".MainActivity"
+            android:name=".Activties.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/DarkTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".Activties.CourseInfo"/>
+        <activity android:name=".Activties.AllCourses"/>
+        <activity android:name=".Activties.CalendarActivity"/>
     </application>
 
 </manifest>

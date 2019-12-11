@@ -12,7 +12,7 @@ class DashEntry : Application() {
         Realm.init(this)
         val realmConfig = RealmConfiguration.Builder()
             .name("dash.realm")
-            .schemaVersion(0)
+            .schemaVersion(0).deleteRealmIfMigrationNeeded()
             .build()
         Realm.setDefaultConfiguration(realmConfig)
     }
