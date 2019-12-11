@@ -65,6 +65,7 @@ class CourseInfo: AppCompatActivity(){
 
             val tempC = EachClass()
             val nextId: Long = realm.where(EachClass::class.java).count()+1
+            //TODO: Add ids incrementally
             tempC.id = nextId
             tempC.startTime = startTime.text.toString()
             tempC.endTime = endTime.text.toString()

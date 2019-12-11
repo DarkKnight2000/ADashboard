@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // TODO: Need to add course adding page
 
     }
 }
