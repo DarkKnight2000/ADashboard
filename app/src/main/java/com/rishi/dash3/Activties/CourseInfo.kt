@@ -7,7 +7,9 @@ import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rishi.dash3.Adapters.InfoAdapter
@@ -15,10 +17,9 @@ import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
 import io.realm.Realm
-import io.realm.RealmList
+import io.realm.RealmModel
 import io.realm.exceptions.RealmException
 import kotlinx.android.synthetic.main.activity_courseinfo.*
-
 
 
 class CourseInfo: AppCompatActivity(){
@@ -48,25 +49,23 @@ class CourseInfo: AppCompatActivity(){
 
         var realmObj: EachCourse ?= realm.where(EachCourse::class.java).equalTo("crsecode",textView3.text.toString()).findFirst()
         var presCls = (realm.copyFromRealm(realmObj!!.crseClsses))
-        var changed = false
         Toast.makeText(this,"Set",Toast.LENGTH_SHORT).show()
 
         val adapter = InfoAdapter(this, presCls, true, realm, realmObj)
         recyclerViewClasses.adapter = adapter
 
 
-
+        var initID = getNextKey()
         btnAddCls.setOnClickListener {
 
             if(!dateSelector.text.contains("/") || !startTime.text.contains(":") || !endTime.text.contains(":")){
                 Toast.makeText(this,"InValid Details",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+            //val clshes = realm.where(EachClass::class.java).between("start")
 
             val tempC = EachClass()
-            val nextId: Long = realm.where(EachClass::class.java).count()+1
-            //TODO: Add ids incrementally
-            tempC.id = nextId
+            tempC.id = initID++
             tempC.startTime = startTime.text.toString()
             tempC.endTime = endTime.text.toString()
             tempC.room = roomName.text.toString()
@@ -76,14 +75,13 @@ class CourseInfo: AppCompatActivity(){
             else{
                 tempC.date = dateSelector.text.toString()
             }
-            Log.i("date set ", tempC.date)
+            Toast.makeText(this, "id "+tempC.id, Toast.LENGTH_SHORT).show()
             presCls.add(tempC)
             val pos = presCls.indexOf(tempC)
             if (pos != -1) {
                 val dataSize = presCls.size
                 adapter.notifyItemInserted(dataSize)
                 adapter.notifyItemRangeChanged(dataSize, dataSize)
-                changed = true
             }
         }
 
@@ -101,10 +99,12 @@ class CourseInfo: AppCompatActivity(){
                 for (c:EachClass in temp){
                     if(!presCls.contains(c)) realmObj.crseClsses.remove(c)
                 }*/
-                realmObj.crseClsses.clear()
-                realmObj.crseClsses.addAll(presCls)
+                realmObj = realm.where(EachCourse::class.java).equalTo("crsecode",textView3.text.toString()).findFirst()
+                realmObj?.crseClsses?.deleteAllFromRealm()
+                realmObj?.crseClsses?.addAll(presCls)
                 realm.commitTransaction()
                 Toast.makeText(this,"Updated!!!",Toast.LENGTH_SHORT).show()
+                for(c in  presCls) Log.i("Got tags2 ", c.id.toString())
 
             }catch (e: RealmException){
                 Log.d("Tag",e.message)
@@ -187,5 +187,18 @@ class CourseInfo: AppCompatActivity(){
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
+    }
+
+    private fun getNextKey(): Long {
+        return try {
+            val number = realm.where(EachClass::class.java).max("id")
+            if (number != null) {
+                number.toLong() + 1
+            } else {
+                0
+            }
+        } catch (e: ArrayIndexOutOfBoundsException) {
+            0
+        }
     }
 }

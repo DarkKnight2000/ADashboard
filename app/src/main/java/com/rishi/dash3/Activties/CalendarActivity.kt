@@ -74,7 +74,7 @@ class CalendarActivity : AppCompatActivity(){
             tempcls.endTime = "ET"
             tempcls.startTime = "ST"
             tempcls.room = "R"
-            tempcls.date = "9/12/2019"
+            tempcls.date = "12/12/2019"
             newCrse.crseClsses.add(tempcls)
             realm.commitTransaction()
         }

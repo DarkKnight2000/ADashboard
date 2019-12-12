@@ -23,6 +23,10 @@ class AllCourses : AppCompatActivity(){
         recyclerView.layoutManager = layoutManager
 
 
+        var allCrs = realm.where(EachCourse::class.java).findAll()
+        var adapter = ClassesAdapter(this, allCrs, realm)
+        recyclerView.adapter = adapter
+
         crseAdd.setOnClickListener {
             realm.beginTransaction()
             realm.deleteAll()
@@ -33,17 +37,14 @@ class AllCourses : AppCompatActivity(){
             tempcls.endTime = "12:30"
             tempcls.startTime = "12:00"
             tempcls.room = "A-LH1"
-            tempcls.date = "2/7/2019"
+            tempcls.date = "12/12/2019"
+            tempcls.id = 0
             newCrse.crseClsses.add(tempcls)
             realm.commitTransaction()
-
+            allCrs = realm.where(EachCourse::class.java).findAll()
+            adapter = ClassesAdapter(this, allCrs, realm)
+            recyclerView.adapter = adapter
         }
-
-        val allCrs = realm.where(EachCourse::class.java).findAll()
-
-
-        var adapter = ClassesAdapter(this, allCrs, realm)
-        recyclerView.adapter = adapter
 
     }
 

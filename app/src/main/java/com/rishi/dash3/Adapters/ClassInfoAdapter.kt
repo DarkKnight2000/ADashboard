@@ -1,6 +1,7 @@
 package com.rishi.dash3.Adapters
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,25 +34,8 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
 
     inner class EachViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
 
-        private var crseClss: EachClass =
-            EachClass()
+        private var crseClss: EachClass = EachClass()
         private var crsePos: Int = 0
-
-        init {
-            itemView.btnBin.setOnClickListener {
-                if(clsses.map { it.id }.contains(crseClss.id)) {
-                    clsses.removeAt(clsses.map { it.id }.indexOf(crseClss.id))
-                    realm.beginTransaction()
-                    crse?.crseClsses?.remove(crseClss)
-                    realm.commitTransaction()
-                    notifyItemRemoved(crsePos)
-                    notifyItemRangeChanged(crsePos, clsses.size)
-                    Toast.makeText(context,"delete  id ",Toast.LENGTH_SHORT).show()
-                }
-                else
-                    Toast.makeText(context,"Cant delete",Toast.LENGTH_SHORT).show()
-            }
-        }
 
         fun setData(cls: EachClass?, pos:Int, canEdit: Boolean){
             itemView.weekdayView.text = cls!!.date
@@ -60,9 +44,22 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
             itemView.room.text = cls.room
             itemView.btnBin.visibility = if (canEdit) View.VISIBLE else View.GONE
 
-
             this.crseClss = cls
             this.crsePos = pos
+
+            Log.i("Got tags ", crseClss.id.toString())
+            itemView.btnBin.setOnClickListener {
+                if(clsses.map { it.id }.contains(crseClss.id)) {
+                    val pos = clsses.map { it.id }.indexOf(crseClss.id)
+                    Log.i("Got at pos ", pos.toString())
+                    clsses.removeAt(pos)
+                    notifyItemRemoved(crsePos)
+                    notifyItemRangeChanged(crsePos, clsses.size)
+                    Toast.makeText(context,"delete  id " + crseClss.id,Toast.LENGTH_SHORT).show()
+                }
+                else
+                    Toast.makeText(context,"Cant delete",Toast.LENGTH_SHORT).show()
+            }
 
         }
     }
