@@ -30,15 +30,6 @@
 
         <ImageView android:layout_width="30dp" android:layout_height="match_parent"
 
-            android:src="@android:drawable/ic_dialog_info"
-            android:tint="#111"
-            android:layout_gravity="center"
-            android:id="@+id/btnInfo"
-            />
-
-
-        <ImageView android:layout_width="30dp" android:layout_height="match_parent"
-
             android:src="@android:drawable/ic_menu_delete"
             android:tint="#111"
             android:layout_gravity="center"

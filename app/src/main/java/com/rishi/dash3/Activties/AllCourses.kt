@@ -34,10 +34,11 @@ class AllCourses : AppCompatActivity(){
             newCrse.crsename = "N"
             newCrse.defSlot = "S"
             var tempcls = EachClass()
-            tempcls.endTime = "12:30"
-            tempcls.startTime = "12:00"
+            tempcls.endTime = 750
+            tempcls.startTime = 720
             tempcls.room = "A-LH1"
             tempcls.date = "12/12/2019"
+            tempcls.day = "Thu"
             tempcls.id = 0
             newCrse.crseClsses.add(tempcls)
             realm.commitTransaction()

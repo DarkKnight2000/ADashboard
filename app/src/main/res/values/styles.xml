@@ -30,4 +30,12 @@
         <item name="colorAccent">@color/myAccent</item>
     </style>
 
+
+    <!-- <style name="Widget.CalendarView.Custom" parent="android:Widget.CalendarView">
+        <item name="android:focusedMonthDateColor">@color/myPrimaryLight</item>
+        <item name="android:weekNumberColor">@color/myText</item>
+        <item name="android:weekDayTextAppearance">@style/DarkTheme</item>
+        <item name="android:dateTextAppearance">@style/DarkTheme</item>
+    </style> -->
+
 </resources>

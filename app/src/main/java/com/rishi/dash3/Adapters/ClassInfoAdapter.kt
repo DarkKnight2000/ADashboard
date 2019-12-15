@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
+import com.rishi.dash3.intToDate
 import io.realm.Realm
 import kotlinx.android.synthetic.main.edit_info_card.view.*
 
@@ -37,10 +38,11 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
         private var crseClss: EachClass = EachClass()
         private var crsePos: Int = 0
 
-        fun setData(cls: EachClass?, pos:Int, canEdit: Boolean){
-            itemView.weekdayView.text = cls!!.date
-            itemView.startTime.text = cls.startTime
-            itemView.endTime.text = cls.endTime
+        fun setData(cls: EachClass, pos:Int, canEdit: Boolean){
+            if(cls.date != "") itemView.weekdayView.text = cls.date
+            else itemView.weekdayView.text = cls.day
+            itemView.startTime.text = intToDate(cls.startTime)
+            itemView.endTime.text = intToDate(cls.endTime)
             itemView.room.text = cls.room
             itemView.btnBin.visibility = if (canEdit) View.VISIBLE else View.GONE
 
@@ -59,6 +61,9 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
                 }
                 else
                     Toast.makeText(context,"Cant delete",Toast.LENGTH_SHORT).show()
+            }
+            itemView.setOnClickListener {
+                Toast.makeText(context, "course : "+crseClss.code, Toast.LENGTH_SHORT).show()
             }
 
         }

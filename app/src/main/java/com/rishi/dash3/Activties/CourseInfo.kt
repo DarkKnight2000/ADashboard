@@ -16,8 +16,11 @@ import com.rishi.dash3.Adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
+import com.rishi.dash3.dateToInt
 import io.realm.Realm
 import io.realm.RealmModel
+import io.realm.RealmQuery
+import io.realm.RealmResults
 import io.realm.exceptions.RealmException
 import kotlinx.android.synthetic.main.activity_courseinfo.*
 
@@ -38,8 +41,9 @@ class CourseInfo: AppCompatActivity(){
         textView6.text = bundle?.getString("slot")
         startTime.text = "11:20"
         endTime.text = "11:21"
-        dateSelector.text  = "3/4/2019"
-
+        dateSelector.text  = "14/12/2019"
+        var dateSelectedDay = 7
+        val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
 
 
         val layoutManager = LinearLayoutManager(this)
@@ -58,30 +62,50 @@ class CourseInfo: AppCompatActivity(){
         var initID = getNextKey()
         btnAddCls.setOnClickListener {
 
-            if(!dateSelector.text.contains("/") || !startTime.text.contains(":") || !endTime.text.contains(":")){
+            if((!weekly.isChecked && !dateSelector.text.contains("/"))|| !startTime.text.contains(":") || !endTime.text.contains(":")){
                 Toast.makeText(this,"InValid Details",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            //val clshes = realm.where(EachClass::class.java).between("start")
-
             val tempC = EachClass()
             tempC.id = initID++
-            tempC.startTime = startTime.text.toString()
-            tempC.endTime = endTime.text.toString()
+            tempC.startTime = dateToInt(startTime.text.toString())
+            tempC.endTime = dateToInt(endTime.text.toString())
             tempC.room = roomName.text.toString()
+            tempC.code = textView3.text.toString()
+            var clshes:RealmQuery<EachClass>
+            var clshPres:EachClass
             if(weekly.isChecked){
-                tempC.date = daySpinner.selectedItem.toString()
+                tempC.day = daySpinner.selectedItem.toString()
+                tempC.date = ""
+                clshes = realm.where(EachClass::class.java).notEqualTo("code", tempC.code).equalTo("day", tempC.day)
             }
             else{
                 tempC.date = dateSelector.text.toString()
+                tempC.day = weekDays[dateSelectedDay-1]
+                clshes = realm.where(EachClass::class.java).notEqualTo("code", tempC.code).`in`("date", arrayOf("", tempC.date)).equalTo("day", tempC.day)
             }
-            Toast.makeText(this, "id "+tempC.id, Toast.LENGTH_SHORT).show()
-            presCls.add(tempC)
-            val pos = presCls.indexOf(tempC)
-            if (pos != -1) {
-                val dataSize = presCls.size
-                adapter.notifyItemInserted(dataSize)
-                adapter.notifyItemRangeChanged(dataSize, dataSize)
+            val clshes1 = clshes.between("startTime", tempC.startTime, tempC.endTime-1)
+
+            var clshCls = clshes1.findFirst()
+            if(clshCls == null){
+                val clshes2 = clshes.between("endTime", tempC.startTime+1, tempC.endTime)
+                clshCls = clshes2.findFirst()
+            }
+            clshPres = getClshes(presCls, tempC)
+            if(clshCls == null && clshPres.id == (-1).toLong()){
+                Toast.makeText(this, "id "+tempC.id, Toast.LENGTH_SHORT).show()
+                presCls.add(tempC)
+                val pos = presCls.indexOf(tempC)
+                if (pos != -1) {
+                    val dataSize = presCls.size
+                    adapter.notifyItemInserted(dataSize)
+                    adapter.notifyItemRangeChanged(dataSize, dataSize)
+                }
+            }
+            else{
+                // TODO: Make them into alerts
+                if(clshCls!=null) Toast.makeText(this, "Clashing with prev class of "+clshCls.endTime, Toast.LENGTH_SHORT).show()
+                else Toast.makeText(this, "Clashing with class of "+clshPres.endTime, Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -126,14 +150,13 @@ class CourseInfo: AppCompatActivity(){
             }
         }
 
-        val personNames = arrayOf("Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun")
 
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, personNames)
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, weekDays)
         daySpinner.adapter = arrayAdapter
 
         daySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                Toast.makeText(this@CourseInfo, "Selected " + personNames[position], Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CourseInfo, "Selected " + weekDays[position], Toast.LENGTH_SHORT).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
@@ -176,13 +199,23 @@ class CourseInfo: AppCompatActivity(){
                 cal.set(Calendar.DAY_OF_MONTH,day)
                 val mDate = String.format("%d/%d/%d",day,mnth+1,year)
                 dateSelector.text = mDate
+                dateSelectedDay = cal.get(Calendar.DAY_OF_WEEK)
             }
             DatePickerDialog(this,dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
         }
 
 
     }
-
+    // TODO: Check error here
+    private fun getClshes(a:List<EachClass>, b:EachClass):EachClass{
+        for(c:EachClass in a){
+            if(c.day == b.day && ((c.startTime <= b.startTime && b.startTime < c.endTime ) || (c.startTime < b.endTime && b.endTime <= c.endTime ))){
+                debug.text = debug.text.toString() + c.code + "\n"
+                return c
+            }
+        }
+        return EachClass()
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -201,4 +234,5 @@ class CourseInfo: AppCompatActivity(){
             0
         }
     }
+
 }

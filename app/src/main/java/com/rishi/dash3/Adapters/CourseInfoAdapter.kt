@@ -40,7 +40,7 @@ class ClassesAdapter(val context: Context, val clsses:MutableList<EachCourse>, v
         private var crsePos: Int = 0
 
         init {
-            itemView.btnInfo.setOnClickListener{
+            itemView.setOnClickListener{
                 if(clsses.size >= crsePos){
                     val intent = Intent(context, CourseInfo::class.java)
 

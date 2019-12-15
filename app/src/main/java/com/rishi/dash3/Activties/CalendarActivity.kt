@@ -50,7 +50,7 @@ class CalendarActivity : AppCompatActivity(){
             cal.set(Calendar.DAY_OF_MONTH,dayOfMonth)
             mDate = String.format("%d/%d/%d",dayOfMonth,month+1,year)
             mDay = cal.get(Calendar.DAY_OF_WEEK)
-            eachCrseCls = realm.where(EachClass::class.java).`in`("date", arrayOf(mDate, weekDays[mDay-1])).findAll()
+            eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]).`in`("date", arrayOf(mDate, "")).findAll()
             Toast.makeText(this, "$mDay $mDate", Toast.LENGTH_SHORT).show()
             val adapter = InfoAdapter(
                 this,
@@ -63,6 +63,7 @@ class CalendarActivity : AppCompatActivity(){
 
         }
 
+
         testCalendar.setOnClickListener {
             realm.beginTransaction()
             realm.deleteAll()
@@ -71,8 +72,8 @@ class CalendarActivity : AppCompatActivity(){
             newCrse.defSlot = "S"
             var tempcls = EachClass()
             tempcls.id = 1
-            tempcls.endTime = "ET"
-            tempcls.startTime = "ST"
+            tempcls.endTime = 660
+            tempcls.startTime = 720
             tempcls.room = "R"
             tempcls.date = "12/12/2019"
             newCrse.crseClsses.add(tempcls)
