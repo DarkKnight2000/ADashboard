@@ -1,41 +1,55 @@
-package com.rishi.dash3.Activties
+package com.rishi.dash3.Fragments
 
-import android.icu.text.SimpleDateFormat
+
 import android.icu.util.Calendar
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.CalendarView
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.rishi.dash3.Adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.Adapters.InfoAdapter
 import com.rishi.dash3.R
 import io.realm.Realm
-import io.realm.RealmResults
-import kotlinx.android.synthetic.main.activity_calendar.*
 
-class CalendarActivity : AppCompatActivity(){
+class CalendarFragment : Fragment() {
+
     lateinit var realm: Realm
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar)
         realm = Realm.getDefaultInstance()
+    }
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
-        val layoutManager = LinearLayoutManager(this)
+        val view = inflater.inflate(R.layout.activity_calendar, container, false)
+        val calendarTT = view.findViewById<CalendarView>(R.id.calendarTT)
+        val recyclerViewClassesDay = view.findViewById<RecyclerView>(R.id.recyclerViewClassesDay)
+        val testCalendar = view.findViewById<Button>(R.id.testCalendar)
+        val layoutManager = LinearLayoutManager(this.context!!)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
-        recyclerViewClassesDay.layoutManager = layoutManager
+        view.findViewById<RecyclerView>(R.id.recyclerViewClassesDay).layoutManager = layoutManager
         val cal = Calendar.getInstance()
         var mDay = cal.get(Calendar.DAY_OF_WEEK)
         val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
-        var mDate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR)
-        Toast.makeText(this, "$mDay $mDate", Toast.LENGTH_SHORT).show()
+        var mDate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(
+            Calendar.YEAR)
+        //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
         var eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]).`in`("date", arrayOf(mDate, "")).findAll()
-        Toast.makeText(this, "$mDay $mDate", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
         val adapterT = InfoAdapter(
-            this,
+            this.context!!,
             eachCrseCls.sortedWith(compareBy{ it.startTime }).toMutableList(),
             false,
             realm,
@@ -51,9 +65,9 @@ class CalendarActivity : AppCompatActivity(){
             mDate = String.format("%d/%d/%d",dayOfMonth,month+1,year)
             mDay = cal.get(Calendar.DAY_OF_WEEK)
             eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]).`in`("date", arrayOf(mDate, "")).findAll()
-            Toast.makeText(this, "$mDay $mDate", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
             val adapter = InfoAdapter(
-                this,
+                this.context!!,
                 eachCrseCls.sortedWith(compareBy{ it.startTime }).toMutableList(),
                 false,
                 realm,
@@ -80,24 +94,13 @@ class CalendarActivity : AppCompatActivity(){
             newCrse.crseClsses.add(tempcls)
             realm.commitTransaction()
         }
-
+        return view
     }
-
-
-    /*private fun getClses(allC: List<EachCls>, day: String, date:String): MutableList<EachCls> {
-
-        var reqC: MutableList<EachCls> = mutableListOf()
-
-        for (cls in allC) {
-            if (cls.date == day || cls.date == date) {
-                reqC.add(cls)
-            }
-        }
-        return reqC
-    }*/
 
     override fun onDestroy() {
-        realm.close()
         super.onDestroy()
+        realm.close()
     }
+
+
 }

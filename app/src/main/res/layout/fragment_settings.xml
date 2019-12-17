@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sem Start"
+        android:id="@+id/semStartLabel"
+        android:padding="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        android:id="@+id/semStart"
+        android:layout_alignTop="@id/semStartLabel"
+        android:layout_alignStart="@id/seg2"
+        android:padding="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seg3 Start"
+        android:id="@+id/seg1Label"
+        android:padding="10dp"
+        android:layout_below="@id/semStartLabel"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        android:id="@+id/seg1"
+        android:layout_alignTop="@id/seg1Label"
+        android:layout_alignStart="@id/seg2"
+        android:padding="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seg5 Start"
+        android:id="@+id/seg2Label"
+        android:padding="10dp"
+        android:layout_below="@id/seg1Label"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        android:id="@+id/seg2"
+        android:layout_alignTop="@id/seg2Label"
+        android:layout_toEndOf="@id/seg2Label"
+        android:padding="10dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sem End"
+        android:id="@+id/seg3Label"
+        android:padding="10dp"
+        android:layout_below="@id/seg2Label"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Date"
+        android:id="@+id/seg3"
+        android:layout_alignTop="@id/seg3Label"
+        android:layout_alignStart="@id/seg2"
+        android:padding="10dp"/>
+</RelativeLayout>

@@ -82,13 +82,15 @@ class CourseInfo: AppCompatActivity(){
             else{
                 tempC.date = dateSelector.text.toString()
                 tempC.day = weekDays[dateSelectedDay-1]
-                clshes = realm.where(EachClass::class.java).notEqualTo("code", tempC.code).`in`("date", arrayOf("", tempC.date)).equalTo("day", tempC.day)
+                clshes = realm.where(EachClass::class.java).notEqualTo("code", tempC.code).equalTo("day", tempC.day)
+                val c1 = clshes.`in`("date", arrayOf("", tempC.date))
+                clshes = c1
             }
             val clshes1 = clshes.between("startTime", tempC.startTime, tempC.endTime-1)
+            val clshes2 = clshes.between("endTime", tempC.startTime+1, tempC.endTime)
 
             var clshCls = clshes1.findFirst()
             if(clshCls == null){
-                val clshes2 = clshes.between("endTime", tempC.startTime+1, tempC.endTime)
                 clshCls = clshes2.findFirst()
             }
             clshPres = getClshes(presCls, tempC)
@@ -210,7 +212,6 @@ class CourseInfo: AppCompatActivity(){
     private fun getClshes(a:List<EachClass>, b:EachClass):EachClass{
         for(c:EachClass in a){
             if(c.day == b.day && ((c.startTime <= b.startTime && b.startTime < c.endTime ) || (c.startTime < b.endTime && b.endTime <= c.endTime ))){
-                debug.text = debug.text.toString() + c.code + "\n"
                 return c
             }
         }
