@@ -39,8 +39,11 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
         private var crsePos: Int = 0
 
         fun setData(cls: EachClass, pos:Int, canEdit: Boolean){
-            if(cls.date != "") itemView.weekdayView.text = cls.date
-            else itemView.weekdayView.text = cls.day
+            if(canEdit) {
+                if (cls.date != "") itemView.weekdayView.text = cls.date
+                else itemView.weekdayView.text = cls.day
+            }
+            else itemView.weekdayView.text = cls.code
             itemView.startTime.text = intToDate(cls.startTime)
             itemView.endTime.text = intToDate(cls.endTime)
             itemView.room.text = cls.room
@@ -63,7 +66,7 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
                     Toast.makeText(context,"Cant delete",Toast.LENGTH_SHORT).show()
             }
             itemView.setOnClickListener {
-                Toast.makeText(context, "course : "+crseClss.code, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Day : "+crseClss.day, Toast.LENGTH_SHORT).show()
             }
 
         }

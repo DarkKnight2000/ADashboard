@@ -57,7 +57,6 @@ class MainActivity : AppCompatActivity() {
 
 
         botNav.setOnNavigationItemSelectedListener(listener)
-        // TODO: Need to add course adding page
 
     }
 
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity() {
                 botNav.selectedItemId = botNav.menu[i].itemId
                 supportActionBar?.title = titles[i]
                 botNav.setOnNavigationItemSelectedListener(listener)
-                Toast.makeText(this, "active frag "+i, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "active frag "+i, Toast.LENGTH_SHORT).show()
                 break
             }
             ++i

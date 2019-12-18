@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.activity_allcourses.*
 class AllCourses : AppCompatActivity(){
     lateinit var realm: Realm
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+    /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_allcourses)
         realm = Realm.getDefaultInstance()
@@ -52,5 +52,5 @@ class AllCourses : AppCompatActivity(){
     override fun onDestroy() {
         super.onDestroy()
         realm.close()
-    }
+    }*/
 }

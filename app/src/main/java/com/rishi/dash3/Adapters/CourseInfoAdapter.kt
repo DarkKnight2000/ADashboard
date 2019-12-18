@@ -1,8 +1,8 @@
 package com.rishi.dash3.Adapters
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -51,17 +51,21 @@ class ClassesAdapter(val context: Context, val clsses:MutableList<EachCourse>, v
 
                 }
                 else
-                    Toast.makeText(context,"Cant open intent", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context,"Cant open Info screen", Toast.LENGTH_SHORT).show()
 
             }
             itemView.btnBin.setOnClickListener{
                 if(clsses.contains(crseClss)) {
                     realm.beginTransaction()
-                    clsses.remove(crseClss)
+                    val crse = realm.where(EachCourse::class.java).equalTo("crsecode", crseClss?.crsecode).findFirst()!!
+                    crse.crseClsses.deleteAllFromRealm()
+                    crse.deleteFromRealm()
                     realm.commitTransaction()
                     notifyItemRemoved(crsePos)
                     notifyItemRangeChanged(crsePos,clsses.size)
-                    Toast.makeText(context, "Deleted at, Size left "+ crsePos + clsses.size, Toast.LENGTH_SHORT).show()
+                    //Toast.makeText(context, "Deleted at, Size " + clsses.size, Toast.LENGTH_SHORT).show()
+                    (context as Activity).finish()
+
                 }
                 else
                     Toast.makeText(context,"Cant delete", Toast.LENGTH_SHORT).show()

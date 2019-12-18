@@ -21,8 +21,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activties.CourseInfo"/>
-        <activity android:name=".Activties.AllCourses"/>
-        <activity android:name=".Activties.CalendarActivity"/>
+        <activity android:name=".Activties.AddCourse"/>
     </application>
 
 </manifest>

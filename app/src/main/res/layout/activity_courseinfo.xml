@@ -88,6 +88,37 @@
                 android:layout_height="match_parent"
                 android:padding="20dp"
                 >
+                <RadioGroup
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/segSelector"
+                    android:orientation="horizontal"
+                    android:layout_centerHorizontal="true">
+
+                    <RadioButton
+                        android:id="@+id/one"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1-2"
+                        android:checked="true"
+                        android:paddingHorizontal="15dp"/>
+
+                    <RadioButton
+                        android:id="@+id/two"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text= "3-4"
+                        android:paddingHorizontal="15dp"
+                        />
+                    <RadioButton
+                        android:id="@+id/three"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text= "5-6"
+                        android:paddingHorizontal="15dp"
+                        />
+
+                </RadioGroup>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -95,6 +126,7 @@
                     android:textStyle="bold"
                     android:id="@+id/extraClsDateLabel"
                     android:padding="10dp"
+                    android:layout_below="@id/segSelector"
                     />
                 <Spinner
                     android:id="@+id/daySpinner"
@@ -103,16 +135,15 @@
                     android:layout_toEndOf="@id/extraClsDateLabel"
                     android:layout_alignStart="@id/startTime"
                     android:layout_alignTop="@id/extraClsDateLabel"
-                    android:padding="10dp"
-
+                    android:layout_marginTop="10sp"
                     />
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Pick Date"
                     android:layout_toEndOf="@id/extraClsDateLabel"
                     android:layout_alignStart="@id/startTime"
+                    android:layout_alignTop="@id/extraClsDateLabel"
                     android:id="@+id/dateSelector"
                     android:padding="10dp"
                     />
@@ -189,30 +220,28 @@
             android:layout_height="wrap_content"
             android:tooltipText="@string/app_name"
             android:layout_below="@id/recyclerViewClasses"
-            android:id="@+id/dayModeSelector">
+            android:id="@+id/dayModeSelector"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/dateMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Specific Date"
-                android:checked="true" />
+                android:checked="true"
+                android:layout_marginHorizontal="15dp"/>
 
             <RadioButton
                 android:id="@+id/weekly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text= "Weekly"
+                android:layout_marginHorizontal="15dp"
                 />
 
         </RadioGroup>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/debug"
-            android:layout_below="@id/clsEditor"
-            android:text="@string/app_name"/>
 
 
     </RelativeLayout>

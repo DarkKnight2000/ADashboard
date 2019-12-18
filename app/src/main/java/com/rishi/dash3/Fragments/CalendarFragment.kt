@@ -16,7 +16,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.Adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
+import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
+import com.rishi.dash3.getSeg
 import io.realm.Realm
 
 class CalendarFragment : Fragment() {
@@ -34,6 +36,8 @@ class CalendarFragment : Fragment() {
     ): View? {
 
         val view = inflater.inflate(R.layout.activity_calendar, container, false)
+        val settings = realm.where(Settings::class.java).findFirst()!!
+
         val calendarTT = view.findViewById<CalendarView>(R.id.calendarTT)
         val recyclerViewClassesDay = view.findViewById<RecyclerView>(R.id.recyclerViewClassesDay)
         val testCalendar = view.findViewById<Button>(R.id.testCalendar)
@@ -46,7 +50,7 @@ class CalendarFragment : Fragment() {
         var mDate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(
             Calendar.YEAR)
         //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
-        var eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]).`in`("date", arrayOf(mDate, "")).findAll()
+        var eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, "")).findAll()
         //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
         val adapterT = InfoAdapter(
             this.context!!,
@@ -64,7 +68,7 @@ class CalendarFragment : Fragment() {
             cal.set(Calendar.DAY_OF_MONTH,dayOfMonth)
             mDate = String.format("%d/%d/%d",dayOfMonth,month+1,year)
             mDay = cal.get(Calendar.DAY_OF_WEEK)
-            eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]).`in`("date", arrayOf(mDate, "")).findAll()
+            eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, "")).findAll()
             //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
             val adapter = InfoAdapter(
                 this.context!!,
