@@ -3,7 +3,8 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="20dp">
+    android:padding="20dp"
+    android:layout_gravity="center_vertical">
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,4 +72,21 @@
         android:layout_alignTop="@id/seg3Label"
         android:layout_alignStart="@id/seg2"
         android:padding="10dp"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/seg3Label"
+        android:layout_marginTop="15dp"
+        android:id="@+id/updateSem"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:layout_below="@id/updateSem"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/reset"/>
 </RelativeLayout>
