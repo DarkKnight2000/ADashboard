@@ -14,6 +14,7 @@ import com.rishi.dash3.Fragments.AllCourseFrag
 import com.rishi.dash3.Fragments.CalendarFragment
 import com.rishi.dash3.Fragments.Settings
 import com.rishi.dash3.R
+import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +30,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val tool = supportActionBar
+
+        val realm = Realm.getDefaultInstance()
+        if(realm.where(com.rishi.dash3.Models.Settings::class.java).findFirst() == null) {
+            realm.beginTransaction()
+            val set = realm.createObject(com.rishi.dash3.Models.Settings::class.java)
+            set.semStart = "04/12/2019"
+            set.seg2End = "18/12/2019"
+            set.seg3End = "25/12/2019"
+            set.seg1End = "11/12/2019"
+            realm.commitTransaction()
+        }
+        realm.close()
 
         supportFragmentManager.beginTransaction().replace(R.id.frame_container, cal, tags[0]).commit()
         tool?.title = titles[0]

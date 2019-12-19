@@ -16,14 +16,5 @@ class DashEntry : Application() {
             .schemaVersion(0).deleteRealmIfMigrationNeeded()
             .build()
         setDefaultConfiguration(realmConfig)
-        val realm = Realm.getDefaultInstance()
-        realm.beginTransaction()
-        val set = realm.createObject(Settings::class.java)
-        set.semStart = "4/12/2019"
-        set.seg2End = "18/12/2019"
-        set.seg3End = "25/12/2019"
-        set.seg1End = "11/12/2019"
-        realm.commitTransaction()
-        realm.close()
     }
 }

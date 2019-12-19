@@ -3,17 +3,17 @@
 
     <item
         android:id="@+id/navigation_cal"
-        android:icon="@drawable/ic_store_white_24dp"
+        android:icon="@drawable/baseline_calendar_today_white_18"
         android:title="Calendar" />
 
     <item
         android:id="@+id/navigation_all"
-        android:icon="@drawable/ic_card_giftcard_white_24dp"
+        android:icon="@drawable/baseline_list_white_18"
         android:title="Courses" />
 
     <item
         android:id="@+id/navigation_set"
-        android:icon="@drawable/ic_shopping_cart_white_24dp"
-        android:title="Setting" />
+        android:icon="@drawable/baseline_settings_applications_white_24"
+        android:title="Settings" />
 
 </menu>

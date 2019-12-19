@@ -6,7 +6,7 @@ import io.realm.Realm
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun dateToInt(date:String):Int{
+fun timeToInt(date:String):Int{
     val form = date.split(":")
     var res = 0
     res += form[0].toInt()*60
@@ -14,7 +14,7 @@ fun dateToInt(date:String):Int{
     return res
 }
 
-fun intToDate(value:Int):String{
+fun intToTime(value:Int):String{
     var str = ""
     str += if (value/60 < 10) "0"+(value/60) else (value/60)
     str += ":"

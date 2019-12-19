@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.Activties.CourseInfo
 import com.rishi.dash3.Models.EachCourse
@@ -55,20 +56,35 @@ class ClassesAdapter(val context: Context, val clsses:MutableList<EachCourse>, v
 
             }
             itemView.btnBin.setOnClickListener{
-                if(clsses.contains(crseClss)) {
-                    realm.beginTransaction()
-                    val crse = realm.where(EachCourse::class.java).equalTo("crsecode", crseClss?.crsecode).findFirst()!!
-                    crse.crseClsses.deleteAllFromRealm()
-                    crse.deleteFromRealm()
-                    realm.commitTransaction()
-                    notifyItemRemoved(crsePos)
-                    notifyItemRangeChanged(crsePos,clsses.size)
-                    //Toast.makeText(context, "Deleted at, Size " + clsses.size, Toast.LENGTH_SHORT).show()
-                    (context as Activity).finish()
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Warning!!")
+                //set message for alert dialog
+                builder.setMessage("Are you sure you want to delete \"${crseClss?.crsename}\" course? This cannot be undone!")
 
+                //performing positive action
+                builder.setPositiveButton("Delete"){_, _ ->
+                    if(clsses.contains(crseClss)) {
+                        realm.beginTransaction()
+                        val crse = realm.where(EachCourse::class.java).equalTo("crsecode", crseClss?.crsecode).findFirst()
+                        crse?.crseClsses?.deleteAllFromRealm()
+                        crse?.deleteFromRealm()
+                        realm.commitTransaction()
+                        notifyItemRemoved(crsePos)
+                        notifyItemRangeChanged(crsePos,clsses.size)
+                        //Toast.makeText(context, "Deleted at, Size " + clsses.size, Toast.LENGTH_SHORT).show()
+                    }
+                    else
+                        Toast.makeText(context,"Cant delete course", Toast.LENGTH_SHORT).show()
                 }
-                else
-                    Toast.makeText(context,"Cant delete", Toast.LENGTH_SHORT).show()
+                //performing cancel action
+                builder.setNeutralButton("Cancel"){_ , _ ->
+                    Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
+                }
+                // Create the AlertDialog
+                val alertDialog: AlertDialog = builder.create()
+                // Set other dialog properties
+                alertDialog.setCanceledOnTouchOutside(true)
+                alertDialog.show()
             }
         }
 

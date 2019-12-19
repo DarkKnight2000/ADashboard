@@ -30,10 +30,13 @@ class Settings : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         realm = Realm.getDefaultInstance()
-        val t = realm.where(Settings::class.java).findFirst()
-        if(t == null){
+        if(realm.where(Settings::class.java).findFirst() == null) {
             realm.beginTransaction()
-            realm.createObject(Settings::class.java)
+            val set = realm.createObject(Settings::class.java)
+            set.semStart = "04/12/2019"
+            set.seg2End = "18/12/2019"
+            set.seg3End = "25/12/2019"
+            set.seg1End = "11/12/2019"
             realm.commitTransaction()
         }
     }
@@ -74,10 +77,9 @@ class Settings : Fragment() {
             builder.setTitle("Warning!")
             //set message for alert dialog
             builder.setMessage("This will delete all courses and their classes and cannot be undone!!")
-            builder.setIcon(android.R.drawable.ic_dialog_alert)
 
             //performing positive action
-            builder.setPositiveButton("Yes"){_, _ ->
+                builder.setPositiveButton("DELETE EVERYTHING"){_, _ ->
                 realm.beginTransaction()
                 realm.where(EachClass::class.java).findAll().deleteAllFromRealm()
                 realm.where(EachCourse::class.java).findAll().deleteAllFromRealm()

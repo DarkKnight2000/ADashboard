@@ -11,7 +11,9 @@
         android:layout_height="wrap_content"
         android:text="Sem Start"
         android:id="@+id/semStartLabel"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -20,7 +22,9 @@
         android:id="@+id/semStart"
         android:layout_alignTop="@id/semStartLabel"
         android:layout_alignStart="@id/seg2"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -28,7 +32,9 @@
         android:text="Seg3 Start"
         android:id="@+id/seg1Label"
         android:padding="10dp"
-        android:layout_below="@id/semStartLabel"/>
+        android:layout_below="@id/semStartLabel"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -37,7 +43,9 @@
         android:id="@+id/seg1"
         android:layout_alignTop="@id/seg1Label"
         android:layout_alignStart="@id/seg2"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -45,7 +53,9 @@
         android:text="Seg5 Start"
         android:id="@+id/seg2Label"
         android:padding="10dp"
-        android:layout_below="@id/seg1Label"/>
+        android:layout_below="@id/seg1Label"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -54,7 +64,9 @@
         android:id="@+id/seg2"
         android:layout_alignTop="@id/seg2Label"
         android:layout_toEndOf="@id/seg2Label"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -62,7 +74,9 @@
         android:text="Sem End"
         android:id="@+id/seg3Label"
         android:padding="10dp"
-        android:layout_below="@id/seg2Label"/>
+        android:layout_below="@id/seg2Label"
+        android:textSize="20sp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -71,7 +85,9 @@
         android:id="@+id/seg3"
         android:layout_alignTop="@id/seg3Label"
         android:layout_alignStart="@id/seg2"
-        android:padding="10dp"/>
+        android:padding="10dp"
+        android:textSize="20sp"
+        />
 
     <Button
         android:layout_width="wrap_content"
@@ -80,7 +96,8 @@
         android:layout_centerHorizontal="true"
         android:layout_below="@id/seg3Label"
         android:layout_marginTop="15dp"
-        android:id="@+id/updateSem"/>
+        android:id="@+id/updateSem"
+        />
 
     <Button
         android:layout_width="wrap_content"

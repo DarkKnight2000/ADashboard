@@ -5,8 +5,9 @@
     <color name="colorAccent">#D81B60</color>
     <color name="myAccentDark">#137cce</color>
     <color name="myAccent">#138ddf</color>
+    <color name="myAccentLight">#0982d9</color>
     <color name="myPrimaryDark">#222222</color>
     <color name="myPrimary">#444444</color>
-    <color name="myPrimaryLight">#666666</color>
+    <color name="myPrimaryLight">#555555</color>
     <color name="myText">#ffffff</color>
 </resources>

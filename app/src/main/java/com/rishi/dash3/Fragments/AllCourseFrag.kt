@@ -11,7 +11,6 @@ import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.Activties.AddCourse
-import com.rishi.dash3.Activties.CourseInfo
 import com.rishi.dash3.Adapters.ClassesAdapter
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
@@ -36,14 +35,19 @@ class AllCourseFrag : Fragment() {
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         view.findViewById<RecyclerView>(R.id.recyclerView).layoutManager = layoutManager
 
-        var allCrs = realm.where(EachCourse::class.java).findAll()
-        var adapter = ClassesAdapter(this.context!!, allCrs, realm)
-        view.findViewById<RecyclerView>(R.id.recyclerView).adapter = adapter
+
         view.findViewById<Button>(R.id.crseAdd).setOnClickListener {
             val intent = Intent(this.context, AddCourse::class.java)
             this.startActivity(intent)
         }
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        var allCrs = realm.where(EachCourse::class.java).findAll()
+        var adapter = ClassesAdapter(this.context!!, allCrs, realm)
+        view?.findViewById<RecyclerView>(R.id.recyclerView)?.adapter = adapter
     }
 
     override fun onDestroy() {

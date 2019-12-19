@@ -20,6 +20,7 @@ class AddCourse : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.fragment_add_course)
+        actionBar?.title = "Course Info"
         realm = Realm.getDefaultInstance()
 
         // Inflate the layout for this fragment
@@ -31,7 +32,7 @@ class AddCourse : AppCompatActivity() {
         val segSel = findViewById<Spinner>(R.id.segSel)
         //val preCls= findViewById<TextView>(R.id.defClses)
         val classMap:HashMap<String, ArrayList<String>> = HashMap()
-        classMap["A"] =  arrayListOf("Mon 09:00 10:00")
+        classMap["A"] =  arrayListOf("Mon 09:00 10:00", "Wed 11:00 12:00", "Thu 10:00 11:00")
         classMap["B"] = arrayListOf("Tue 09:00 10:00")
         classMap["None"] = arrayListOf()
         val segMap:HashMap<String, ArrayList<String>> = HashMap()
@@ -75,8 +76,8 @@ class AddCourse : AppCompatActivity() {
                     cls.id = initID++
                     val c1 = c.split(" ")
                     if (c1.size < 3) continue
-                    cls.startTime = dateToInt(c1[1])
-                    cls.endTime = dateToInt(c1[2])
+                    cls.startTime = timeToInt(c1[1])
+                    cls.endTime = timeToInt(c1[2])
                     cls.room = room.text.toString()
                     cls.day = c1[0] + " " + s
                     cls.code = code.text.toString()
@@ -84,7 +85,7 @@ class AddCourse : AppCompatActivity() {
                     if(t.id != (-1).toLong()){
                         val builder = AlertDialog.Builder(this)
                         builder.setTitle("Oops!!")
-                        val msg =  "Clashing with class of " + t.code + " from ${intToDate(t.startTime)} to ${intToDate(t.endTime)}"
+                        val msg =  "Clashing with class of " + t.code + " from ${intToTime(t.startTime)} to ${intToTime(t.endTime)}"
                         builder.setMessage(msg)
                         builder.setPositiveButton("OK"){_,_ -> return@setPositiveButton}
                         val alertDialog: AlertDialog = builder.create()
@@ -102,6 +103,7 @@ class AddCourse : AppCompatActivity() {
             crse.defSlot = preSlots[slotSel.selectedItemPosition]
             crse.crseClsses.addAll(clsesCheck)
             realm.commitTransaction()
+            this.finish()
         }
     }
 

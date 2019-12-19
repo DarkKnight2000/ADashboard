@@ -40,7 +40,6 @@ class CalendarFragment : Fragment() {
 
         val calendarTT = view.findViewById<CalendarView>(R.id.calendarTT)
         val recyclerViewClassesDay = view.findViewById<RecyclerView>(R.id.recyclerViewClassesDay)
-        val testCalendar = view.findViewById<Button>(R.id.testCalendar)
         val layoutManager = LinearLayoutManager(this.context!!)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         view.findViewById<RecyclerView>(R.id.recyclerViewClassesDay).layoutManager = layoutManager
@@ -66,7 +65,9 @@ class CalendarFragment : Fragment() {
             cal.set(Calendar.YEAR,year)
             cal.set(Calendar.MONTH,month)
             cal.set(Calendar.DAY_OF_MONTH,dayOfMonth)
-            mDate = String.format("%d/%d/%d",dayOfMonth,month+1,year)
+            val mn = if(month < 10) "0"+(month+1) else (month+1).toString()
+            val dy = if(dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
+            val mDate = String.format("%s/%s/%d", dy, mn, year)
             mDay = cal.get(Calendar.DAY_OF_WEEK)
             eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, "")).findAll()
             //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
@@ -81,23 +82,6 @@ class CalendarFragment : Fragment() {
 
         }
         calendarTT.setDate(calendarTT.getDate())
-
-
-        testCalendar.setOnClickListener {
-            realm.beginTransaction()
-            realm.deleteAll()
-            var newCrse = realm.createObject(EachCourse::class.java, "XXAAAA")
-            newCrse.crsename = "N"
-            newCrse.defSlot = "S"
-            var tempcls = EachClass()
-            tempcls.id = 1
-            tempcls.endTime = 660
-            tempcls.startTime = 720
-            tempcls.room = "R"
-            tempcls.date = "12/12/2019"
-            newCrse.crseClsses.add(tempcls)
-            realm.commitTransaction()
-        }
         return view
     }
 

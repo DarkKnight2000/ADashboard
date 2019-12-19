@@ -64,13 +64,17 @@ class CourseInfo: AppCompatActivity(){
         btnAddCls.setOnClickListener {
 
             if((!weekly.isChecked && !dateSelector.text.contains("/"))|| !startTime.text.contains(":") || !endTime.text.contains(":")){
-                Toast.makeText(this,"InValid Details",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Invalid Details",Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            else if(timeToInt(startTime.text.toString()) >= timeToInt(endTime.text.toString())){
+                Toast.makeText(this,"Class start time cannot be less than End time",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val tempC = EachClass()
             tempC.id = initID++
-            tempC.startTime = dateToInt(startTime.text.toString())
-            tempC.endTime = dateToInt(endTime.text.toString())
+            tempC.startTime = timeToInt(startTime.text.toString())
+            tempC.endTime = timeToInt(endTime.text.toString())
             tempC.room = roomName.text.toString()
             tempC.code = textView3.text.toString()
             var clshes:RealmQuery<EachClass>
@@ -109,8 +113,8 @@ class CourseInfo: AppCompatActivity(){
                 initID--
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Oops!!")
-                val msg =  if(clshCls!=null)"Clashing with class of " + clshCls.code + " from ${intToDate(clshCls.startTime)} to ${intToDate(clshCls.endTime)}"
-                else "Clashing with class of " + clshPres.code + " from ${intToDate(clshPres.startTime)} to ${intToDate(clshPres.endTime)}"
+                val msg =  if(clshCls!=null)"Clashing with class of " + clshCls.code + " from ${intToTime(clshCls.startTime)} to ${intToTime(clshCls.endTime)}"
+                else "Clashing with class of " + clshPres.code + " from ${intToTime(clshPres.startTime)} to ${intToTime(clshPres.endTime)}"
                 builder.setMessage(msg)
                 builder.setPositiveButton("OK"){_,_ -> return@setPositiveButton}
                 val alertDialog: AlertDialog = builder.create()
