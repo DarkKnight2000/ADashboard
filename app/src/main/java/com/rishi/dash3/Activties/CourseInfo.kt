@@ -169,7 +169,7 @@ class CourseInfo: AppCompatActivity(){
         }
 
 
-        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, weekDays)
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, weekDays)
         daySpinner.adapter = arrayAdapter
 
         daySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {

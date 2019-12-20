@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
@@ -54,16 +55,33 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
 
             Log.i("Got tags ", crseClss.id.toString())
             itemView.btnBin.setOnClickListener {
-                if(clsses.map { it.id }.contains(crseClss.id)) {
-                    val pos = clsses.map { it.id }.indexOf(crseClss.id)
-                    Log.i("Got at pos ", pos.toString())
-                    clsses.removeAt(pos)
-                    notifyItemRemoved(crsePos)
-                    notifyItemRangeChanged(crsePos, clsses.size)
-                    Toast.makeText(context,"delete  id " + crseClss.id,Toast.LENGTH_SHORT).show()
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle("Warning!!")
+                //set message for alert dialog
+                builder.setMessage("Are you sure you want to delete this class? This cannot be undone!")
+
+                //performing positive action
+                builder.setPositiveButton("Delete"){_, _ ->
+                    if(clsses.map { it.id }.contains(crseClss.id)) {
+                        val pos = clsses.map { it.id }.indexOf(crseClss.id)
+                        Log.i("Got at pos ", pos.toString())
+                        clsses.removeAt(pos)
+                        notifyItemRemoved(crsePos)
+                        notifyItemRangeChanged(crsePos, clsses.size)
+                        //Toast.makeText(context,"delete  id " + crseClss.id,Toast.LENGTH_SHORT).show()
+                    }
+                    else
+                        Toast.makeText(context,"Cant delete class",Toast.LENGTH_SHORT).show()
                 }
-                else
-                    Toast.makeText(context,"Cant delete",Toast.LENGTH_SHORT).show()
+                //performing cancel action
+                builder.setNeutralButton("Cancel"){_ , _ ->
+                    //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
+                }
+                // Create the AlertDialog
+                val alertDialog: AlertDialog = builder.create()
+                // Set other dialog properties
+                alertDialog.setCanceledOnTouchOutside(true)
+                alertDialog.show()
             }
             itemView.setOnClickListener {
                 Toast.makeText(context, "Day : "+crseClss.day, Toast.LENGTH_SHORT).show()

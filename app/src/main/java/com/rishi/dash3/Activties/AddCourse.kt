@@ -24,7 +24,7 @@ class AddCourse : AppCompatActivity() {
         realm = Realm.getDefaultInstance()
 
         // Inflate the layout for this fragment
-        Log.i("Hey","view")
+        //Log.i("Hey","view")
         val name = findViewById<EditText>(R.id.textView2)
         val code = findViewById<EditText>(R.id.textView3)
         val room = findViewById<EditText>(R.id.room)
@@ -32,12 +32,29 @@ class AddCourse : AppCompatActivity() {
         val segSel = findViewById<Spinner>(R.id.segSel)
         //val preCls= findViewById<TextView>(R.id.defClses)
         val classMap:HashMap<String, ArrayList<String>> = HashMap()
-        classMap["A"] =  arrayListOf("Mon 09:00 10:00", "Wed 11:00 12:00", "Thu 10:00 11:00")
-        classMap["B"] = arrayListOf("Tue 09:00 10:00")
+        classMap["A"] = arrayListOf("Mon 09:00 10:00", "Wed 11:00 12:00", "Thu 10:00 11:00")
+        classMap["B"] = arrayListOf("Mon 10:00 11:00", "Wed 09:00 10:00", "Thu 11:00 12:00")
+        classMap["C"] = arrayListOf("Mon 11:00 12:00", "Wed 10:00 11:00", "Thu 09:00 10:00")
+        classMap["D"] = arrayListOf("Mon 12:00 13:00", "Wed 09:00 10:00", "Fri 11:00 12:00")
+        classMap["E"] = arrayListOf("Tue 10:00 11:00", "Thu 12:00 13:00", "Fri 09:00 10:00")
+        classMap["F"] = arrayListOf("Tue 11:00 12:00", "Wed 14:30 15:30", "Thu 10:00 11:00")
+        classMap["G"] = arrayListOf("Tue 12:00 13:00", "Wed 12:00 13:00", "Fri 12:00 13:00")
+        classMap["P"] = arrayListOf("Mon 14:30 16:00", "Thu 16:00 17:30")
+        classMap["Q"] = arrayListOf("Mon 16:00 17:30", "Thu 14:30 16:00")
+        classMap["R"] = arrayListOf("Tue 14:30 16:00", "Fri 16:00 17:30")
+        classMap["S"] = arrayListOf("Tue 16:00 17:30", "Fri 14:30 16:00")
+        classMap["W"] = arrayListOf("Mon 17:30 19:00", "Thu 17:30 19:00")
+        classMap["X"] = arrayListOf("Mon 19:00 20:30", "Thu 19:00 20:30")
+        classMap["Y"] = arrayListOf("Tue 17:30 19:00", "Fri 17:30 19:00")
+        classMap["Z"] = arrayListOf("Tue 19:00 20:30", "Fri 19:00 20:30")
         classMap["None"] = arrayListOf()
         val segMap:HashMap<String, ArrayList<String>> = HashMap()
         segMap["1-2"] =  arrayListOf("1-2")
         segMap["1-4"] = arrayListOf("1-2","3-4")
+        segMap["3-4"] =  arrayListOf("3-4")
+        segMap["1-6"] = arrayListOf("1-2","3-4","5-6")
+        segMap["3-6"] = arrayListOf("3-4","5-6")
+        segMap["5-6"] = arrayListOf("5-6")
         val preSlots = classMap.keys.toTypedArray()
         val preSegs = segMap.keys.toTypedArray()
 
@@ -64,6 +81,10 @@ class AddCourse : AppCompatActivity() {
         findViewById<Button>(R.id.addCrse).setOnClickListener {
             if(name.text.toString() == "" || code.text.toString() == "" || room.text.toString() == ""){
                 Toast.makeText(this, "Fill all details", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            else if(realm.where(EachCourse::class.java).equalTo("crsecode", code.text.toString()).findFirst() != null){
+                Toast.makeText(this, "A course with same code exists!! Try another code or edit that course", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             var initID = getNextKey(realm)
