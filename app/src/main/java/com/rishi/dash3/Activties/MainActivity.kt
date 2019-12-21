@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     private val tags = arrayOf("cal", "allC", "sets")
     private val titles = arrayOf("Calendar", "Courses", "Settings")
     lateinit var listener: BottomNavigationView.OnNavigationItemSelectedListener
+    private var exit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +54,7 @@ class MainActivity : AppCompatActivity() {
         realm.close()
 
         listener = BottomNavigationView.OnNavigationItemSelectedListener{
+            exit = false
             val transaction = supportFragmentManager.beginTransaction()
             if(it.itemId == R.id.navigation_cal) {
                 transaction.replace(R.id.frame_container, cal, tags[0])
@@ -69,7 +71,7 @@ class MainActivity : AppCompatActivity() {
             else{
                 transaction.commit()
             }
-            transaction.addToBackStack(null)
+            //transaction.addToBackStack(null)
             transaction.commit()
             true
         }
@@ -80,9 +82,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        Log.i("back_activity ", "here")
-        var i = 0
+        if(exit) super.onBackPressed()
+        //Log.i("back_activity ", "here")
+        /*var i = 0
         for(t in tags){
             var f = supportFragmentManager.findFragmentByTag(t)
             if(f!=null && f.isVisible){
@@ -97,6 +99,10 @@ class MainActivity : AppCompatActivity() {
                 break
             }
             ++i
+        }*/
+        else{
+            Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show()
+            exit = true
         }
 
     }
