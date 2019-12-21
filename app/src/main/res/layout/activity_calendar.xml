@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:clipToPadding="true"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
     >
 
     <RelativeLayout
@@ -17,6 +20,13 @@
             >
 
         </CalendarView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="60dp"
+            android:textSize="100sp"
+            android:layout_below="@id/recyclerViewClassesDay"
+            android:id="@+id/dummy"
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
@@ -24,8 +34,9 @@
             android:id="@+id/recyclerViewClassesDay"
             android:layout_marginTop="40dp"
             android:layout_below="@id/calendarTT"
+            android:nestedScrollingEnabled="false"
             />
 
 
     </RelativeLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

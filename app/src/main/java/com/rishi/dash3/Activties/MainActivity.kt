@@ -40,11 +40,17 @@ class MainActivity : AppCompatActivity() {
             set.seg3End = "25/12/2019"
             set.seg1End = "11/12/2019"
             realm.commitTransaction()
+            supportFragmentManager.beginTransaction().replace(R.id.frame_container, sets, tags[2]).commit()
+            tool?.title = titles[2]
+            Toast.makeText(this, "Set semester dates to get started", Toast.LENGTH_LONG).show()
         }
-        realm.close()
+        else{
+            supportFragmentManager.beginTransaction().replace(R.id.frame_container, cal, tags[0]).commit()
+            tool?.title = titles[0]
+        }
 
-        supportFragmentManager.beginTransaction().replace(R.id.frame_container, cal, tags[0]).commit()
-        tool?.title = titles[0]
+
+        realm.close()
 
         listener = BottomNavigationView.OnNavigationItemSelectedListener{
             val transaction = supportFragmentManager.beginTransaction()

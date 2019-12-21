@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- TODO: If there are more classes we cant scroll down -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_height="match_parent"
     android:layout_width="match_parent"
@@ -11,7 +10,8 @@
         android:id="@+id/frame_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/botNav"

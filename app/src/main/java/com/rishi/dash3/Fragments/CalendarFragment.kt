@@ -20,6 +20,7 @@ import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import io.realm.Realm
+import kotlinx.android.synthetic.main.activity_calendar.*
 
 class CalendarFragment : Fragment() {
 
@@ -79,7 +80,7 @@ class CalendarFragment : Fragment() {
                 null
             )
             recyclerViewClassesDay.adapter = adapter
-
+            dummy.height = recyclerViewClassesDay.height
         }
         calendarTT.setDate(calendarTT.getDate())
         return view

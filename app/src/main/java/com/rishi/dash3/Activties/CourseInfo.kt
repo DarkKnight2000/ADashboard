@@ -39,9 +39,9 @@ class CourseInfo: AppCompatActivity(){
         textView2.text = bundle?.getString("name")
         textView3.text = bundle?.getString("code")
         textView6.text = bundle?.getString("slot")
-        startTime.text = "11:20"
-        endTime.text = "11:21"
-        dateSelector.text  = "14/12/2019"
+        startTime.text = "Pick Time"
+        endTime.text = "Pick Time"
+        dateSelector.text  = "Pick Date"
         var dateSelectedDay = 7
         val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         val settings = realm.where(Settings::class.java).findFirst()!!
@@ -100,7 +100,7 @@ class CourseInfo: AppCompatActivity(){
             }
             clshPres = getClshes(presCls, tempC)
             if(clshCls == null && clshPres.id == (-1).toLong()){
-                Toast.makeText(this, "id "+tempC.id, Toast.LENGTH_SHORT).show()
+                //Toast.makeText(this, "id "+tempC.id, Toast.LENGTH_SHORT).show()
                 presCls.add(tempC)
                 val pos = presCls.indexOf(tempC)
                 if (pos != -1) {
@@ -143,7 +143,7 @@ class CourseInfo: AppCompatActivity(){
                 realmObj.crseClsses.addAll(presCls)
                 realm.commitTransaction()
                 Toast.makeText(this,"Updated!!!",Toast.LENGTH_SHORT).show()
-                for(c in  presCls) Log.i("Got tags2 ", c.id.toString())
+                //for(c in  presCls) Log.i("Got tags2 ", c.id.toString())
 
             }catch (e: RealmException){
                 Log.d("Tag",e.message)
