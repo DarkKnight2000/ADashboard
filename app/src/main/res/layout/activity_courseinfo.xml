@@ -2,11 +2,11 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:theme="@style/DarkTheme">
+    >
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10sp">
+        android:padding="10dp">
 
         <TextView
             android:text="Course Name"
@@ -213,6 +213,7 @@
             android:layout_below="@id/clsEditor"
             android:text="Update"
             android:id="@+id/btnCommit"
+            android:layout_marginTop="15dp"
             />
         <RadioGroup
             android:layout_width="wrap_content"

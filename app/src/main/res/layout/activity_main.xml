@@ -20,6 +20,9 @@
         android:layout_gravity="bottom"
         android:background="?android:attr/windowBackground"
         android:foreground="?attr/selectableItemBackground"
-        app:menu="@menu/menu_nav"/>
+        app:menu="@menu/menu_nav"
+        app:itemIconTint="@drawable/menu_selector"
+        app:itemTextColor="@drawable/menu_selector"
+        />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

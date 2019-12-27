@@ -1,5 +1,7 @@
 <resources>
 
+    <attr format="reference" name="cardStyle"/>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -17,42 +19,42 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <!-- TODO: Update this style -->
-    <style name="DarkTheme" parent="AppTheme">
-        <!--    <item name="android:textColor">@color/myText</item>
-           <item name="android:windowBackground">@color/myPrimary</item>
-           <item name="colorPrimary">@color/myPrimary</item>
-           <item name="colorPrimaryDark">@color/myPrimaryDark</item>
-           <item name="colorAccent">@color/myAccent</item>
-           <item name="buttonStyle">@style/CustomButtonStyle</item>
-           <item name="android:tint">@color/myText</item>
-           <item name="android:calendarViewStyle">@style/CustomCalendar</item> -->
-        <item name="colorPrimary">@color/myAccent</item>
-        <item name="colorPrimaryDark">@color/myAccentDark</item>
-        <item name="colorAccent">@color/myAccent</item>
+    <style name="DarkTheme" parent="Theme.AppCompat.DayNight">
+        <item name="colorAccent">@color/lightBlue</item>
+    </style>
+
+    <!-- <style name="DarkTheme" parent="Theme.AppCompat.DayNight">
+           <item name="colorPrimary">@color/grey3</item>
+           <item name="colorPrimaryDark">@color/grey2</item>
+           <item name="colorAccent">@color/lightBlue</item>
+    </style>
+
+    <style name="CardViewStyle" parent="CardView">
+        <item name="cardCornerRadius">4dp</item>
+        <item name="cardElevation">4dp</item>
+        <item name="cardBackgroundColor">@color/grey3</item>
     </style>
 
 
-    <style name="CustomButtonStyle" parent="Widget.AppCompat.Button.Borderless">
-        <!-- <item name="android:background">@drawable/custom_button</item> -->
-        <item name="android:layout_margin">40sp</item>
-        <item name="android:background">@color/myAccent</item>
+    <style name="CustomButtonStyle">
+        <item name="android:background">@drawable/custom_button</item>
+        <item name="android:padding">10dp</item>
+        <item name="android:layout_margin">10dp</item>
+        <item name="android:background">@color/lightBlue</item>
     </style>
 
-    <style name="CustomCalendar" parent="ThemeOverlay.MaterialComponents.Dark">
-        <item name="colorPrimary">@color/myText</item>
-        <item name="android:dateTextAppearance">@style/CalenderViewDateCustomText</item>
-        <item name="android:weekDayTextAppearance">@style/CalenderViewWeekCustomText</item>
-
+    <style name="CalenderViewCustom" parent="Theme.AppCompat">
+        <item name="colorAccent">@color/blue</item>
+        <item name="colorPrimary">@color/blue</item>
+        <item name="android:textColorPrimary">@color/greyE</item>
     </style>
 
     <style name="CalenderViewDateCustomText" parent="android:TextAppearance.DeviceDefault.Small">
-        <item name="android:textColor">@color/myText</item>
-        <item name="android:weekNumberColor">@color/myText</item>
+        <item name="android:textColor">@color/greyE</item>
     </style>
 
     <style name="CalenderViewWeekCustomText" parent="android:TextAppearance.DeviceDefault.Small">
-        <item name="android:textColor">@color/myText</item>
-    </style>
+        <item name="android:textColor">@color/greyE</item>
+    </style> -->
 
 </resources>

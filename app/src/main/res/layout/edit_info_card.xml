@@ -61,7 +61,7 @@
             android:src="@android:drawable/ic_menu_delete"
             android:layout_gravity="center"
             android:id="@+id/btnBin"
-            android:tint="@color/myPrimary"
+            android:tint="@color/greyE"
             />
 
     </LinearLayout>

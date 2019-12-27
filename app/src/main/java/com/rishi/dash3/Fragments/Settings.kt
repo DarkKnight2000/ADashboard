@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 class Settings : Fragment() {
 
     lateinit var realm: Realm
+    val fileName = "Data.txt"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,6 +91,13 @@ class Settings : Fragment() {
             val alertDialog: AlertDialog = builder.create()
             alertDialog.setCanceledOnTouchOutside(true)
             alertDialog.show()
+        }
+
+        view.findViewById<Button>(R.id.exportData).setOnClickListener {
+            var text = ""
+            context!!.openFileOutput(fileName, Context.MODE_PRIVATE).use {
+                it.write(text.toByteArray())
+            }
         }
 
         val set = realm.where(Settings::class.java).findFirst()!!

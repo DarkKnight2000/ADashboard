@@ -2,13 +2,8 @@ package com.rishi.dash3.Activties
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.view.MenuItem
 import android.widget.Toast
 import androidx.core.view.get
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationMenu
-import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rishi.dash3.Fragments.AllCourseFrag
 import com.rishi.dash3.Fragments.CalendarFragment
@@ -24,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     private val sets = Settings()
     private val tags = arrayOf("cal", "allC", "sets")
     private val titles = arrayOf("Calendar", "Courses", "Settings")
-    lateinit var listener: BottomNavigationView.OnNavigationItemSelectedListener
+    private lateinit var listener: BottomNavigationView.OnNavigationItemSelectedListener
     private var exit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,6 +37,7 @@ class MainActivity : AppCompatActivity() {
             set.seg1End = "11/12/2019"
             realm.commitTransaction()
             supportFragmentManager.beginTransaction().replace(R.id.frame_container, sets, tags[2]).commit()
+            botNav.selectedItemId = R.id.navigation_set
             tool?.title = titles[2]
             Toast.makeText(this, "Set semester dates to get started", Toast.LENGTH_LONG).show()
         }
@@ -82,13 +78,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        if(exit) super.onBackPressed()
         //Log.i("back_activity ", "here")
-        /*var i = 0
+        super.onBackPressed()
+        var i = 0
         for(t in tags){
-            var f = supportFragmentManager.findFragmentByTag(t)
+            val f = supportFragmentManager.findFragmentByTag(t)
             if(f!=null && f.isVisible){
-                Log.i("back_activity ", "where$i")
+                //Log.i("back_activity ", "where$i")
                 botNav.setOnNavigationItemSelectedListener{
                     true
                 }
@@ -99,11 +95,12 @@ class MainActivity : AppCompatActivity() {
                 break
             }
             ++i
-        }*/
+        }
+/*        if(exit) super.onBackPressed()
         else{
             Toast.makeText(this, "Press back again to exit", Toast.LENGTH_SHORT).show()
             exit = true
-        }
+        }*/
 
     }
 }

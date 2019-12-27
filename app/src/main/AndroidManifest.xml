@@ -9,11 +9,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/DarkTheme">
+        android:theme="@style/DarkTheme"
+        >
         <activity
             android:name=".Activties.MainActivity"
             android:label="@string/app_name"
-            android:theme="@style/DarkTheme">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
