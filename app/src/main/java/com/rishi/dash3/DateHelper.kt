@@ -1,6 +1,5 @@
 package com.rishi.dash3
 
-import com.rishi.dash3.Fragments.Settings
 import com.rishi.dash3.Models.EachClass
 import io.realm.Realm
 import java.text.SimpleDateFormat

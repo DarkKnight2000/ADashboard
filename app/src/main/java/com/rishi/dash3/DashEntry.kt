@@ -11,7 +11,6 @@ import io.realm.Realm
 class DashEntry : Application() {
     override fun onCreate() {
         super.onCreate()
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         Realm.init(this)
         val realmConfig = RealmConfiguration.Builder()
             .name("dash.realm")

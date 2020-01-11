@@ -1,17 +1,17 @@
-package com.rishi.dash3.Activties
+package com.rishi.dash3.activties
 
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.rishi.dash3.*
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import io.realm.Realm
-import kotlinx.android.synthetic.main.fragment_add_course.*
+import kotlinx.android.synthetic.main.activity_add_course.*
 
 class AddCourse : AppCompatActivity() {
 
@@ -19,8 +19,9 @@ class AddCourse : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.fragment_add_course)
-        actionBar?.title = "Course Info"
+        setContentView(R.layout.activity_add_course)
+        actionBar?.title = "Add Course"
+        actionBar?.setDisplayHomeAsUpEnabled(true)
         realm = Realm.getDefaultInstance()
 
         // Inflate the layout for this fragment
@@ -35,9 +36,9 @@ class AddCourse : AppCompatActivity() {
         classMap["A"] = arrayListOf("Mon 09:00 10:00", "Wed 11:00 12:00", "Thu 10:00 11:00")
         classMap["B"] = arrayListOf("Mon 10:00 11:00", "Wed 09:00 10:00", "Thu 11:00 12:00")
         classMap["C"] = arrayListOf("Mon 11:00 12:00", "Wed 10:00 11:00", "Thu 09:00 10:00")
-        classMap["D"] = arrayListOf("Mon 12:00 13:00", "Wed 09:00 10:00", "Fri 11:00 12:00")
+        classMap["D"] = arrayListOf("Mon 12:00 13:00", "Tue 09:00 10:00", "Fri 11:00 12:00")
         classMap["E"] = arrayListOf("Tue 10:00 11:00", "Thu 12:00 13:00", "Fri 09:00 10:00")
-        classMap["F"] = arrayListOf("Tue 11:00 12:00", "Wed 14:30 15:30", "Thu 10:00 11:00")
+        classMap["F"] = arrayListOf("Tue 11:00 12:00", "Wed 14:30 15:30", "Fri 10:00 11:00")
         classMap["G"] = arrayListOf("Tue 12:00 13:00", "Wed 12:00 13:00", "Fri 12:00 13:00")
         classMap["P"] = arrayListOf("Mon 14:30 16:00", "Thu 16:00 17:30")
         classMap["Q"] = arrayListOf("Mon 16:00 17:30", "Thu 14:30 16:00")
@@ -64,9 +65,9 @@ class AddCourse : AppCompatActivity() {
         slotSel.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
                 Toast.makeText(this@AddCourse, "Selected " + preSlots[position], Toast.LENGTH_SHORT).show()
-                val arr = classMap[preSlots[position]]!!
+                val arr = classMap[preSlots[position]]
                 var str = ""
-                for(a in arr) str += a + "\n"
+                if(arr != null) for(a in arr) str += a + "\n"
                 defClses.text = str
             }
 

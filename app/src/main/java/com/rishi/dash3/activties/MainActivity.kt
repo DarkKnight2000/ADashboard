@@ -1,13 +1,14 @@
-package com.rishi.dash3.Activties
+package com.rishi.dash3.activties
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.get
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.rishi.dash3.Fragments.AllCourseFrag
-import com.rishi.dash3.Fragments.CalendarFragment
-import com.rishi.dash3.Fragments.Settings
+import com.rishi.dash3.fragments.AllCourseFrag
+import com.rishi.dash3.fragments.CalendarFragment
+import com.rishi.dash3.fragments.Settings
 import com.rishi.dash3.R
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+
         setContentView(R.layout.activity_main)
         val tool = supportActionBar
 
@@ -67,7 +70,7 @@ class MainActivity : AppCompatActivity() {
             else{
                 transaction.commit()
             }
-            //transaction.addToBackStack(null)
+            transaction.addToBackStack(null)
             transaction.commit()
             true
         }

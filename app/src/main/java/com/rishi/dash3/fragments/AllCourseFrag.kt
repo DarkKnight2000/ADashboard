@@ -1,4 +1,4 @@
-package com.rishi.dash3.Fragments
+package com.rishi.dash3.fragments
 
 
 import android.content.Intent
@@ -10,8 +10,8 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.rishi.dash3.Activties.AddCourse
-import com.rishi.dash3.Adapters.ClassesAdapter
+import com.rishi.dash3.activties.AddCourse
+import com.rishi.dash3.adapters.ClassesAdapter
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
 import io.realm.Realm

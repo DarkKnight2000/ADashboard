@@ -192,6 +192,7 @@
                     android:layout_below="@id/endLabel"
                     android:id="@+id/roomName"
                     android:hint="Room"
+                    android:inputType="textCapSentences"
                     />
 
                 <Button

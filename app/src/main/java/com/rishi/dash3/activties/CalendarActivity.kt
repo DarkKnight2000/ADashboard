@@ -1,21 +1,7 @@
-package com.rishi.dash3.Activties
+package com.rishi.dash3.activties
 
-import android.icu.text.SimpleDateFormat
-import android.icu.util.Calendar
-import android.os.Bundle
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.Adapters.InfoAdapter
-import com.rishi.dash3.Models.Settings
-import com.rishi.dash3.R
-import com.rishi.dash3.getSeg
 import io.realm.Realm
-import io.realm.RealmResults
-import kotlinx.android.synthetic.main.activity_calendar.*
 
 class CalendarActivity : AppCompatActivity(){
     lateinit var realm: Realm

@@ -1,4 +1,4 @@
-package com.rishi.dash3.Fragments
+package com.rishi.dash3.fragments
 
 
 import android.icu.util.Calendar
@@ -7,15 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.CalendarView
-import android.widget.TextView
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.rishi.dash3.Adapters.InfoAdapter
+import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
@@ -68,9 +64,9 @@ class CalendarFragment : Fragment() {
             cal.set(Calendar.DAY_OF_MONTH,dayOfMonth)
             val mn = if(month < 10) "0"+(month+1) else (month+1).toString()
             val dy = if(dayOfMonth < 10) "0$dayOfMonth" else "$dayOfMonth"
-            val mDate = String.format("%s/%s/%d", dy, mn, year)
+            val fDate = String.format("%s/%s/%d", dy, mn, year)
             mDay = cal.get(Calendar.DAY_OF_WEEK)
-            eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, "")).findAll()
+            eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(fDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(fDate, "")).findAll()
             //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
             val adapter = InfoAdapter(
                 this.context!!,

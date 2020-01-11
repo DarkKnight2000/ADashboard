@@ -1,6 +1,5 @@
-package com.rishi.dash3.Adapters
+package com.rishi.dash3.adapters
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -9,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.rishi.dash3.Activties.CourseInfo
+import com.rishi.dash3.activties.CourseInfo
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
 import io.realm.Realm
@@ -89,7 +88,7 @@ class ClassesAdapter(val context: Context, val clsses:MutableList<EachCourse>, v
         }
 
         fun setData(cls: EachCourse?, pos:Int){
-            itemView.cardTitle.text = cls!!.crsecode
+            itemView.cardTitle.text = cls!!.crsename
 
             this.crseClss = cls
             this.crsePos = pos

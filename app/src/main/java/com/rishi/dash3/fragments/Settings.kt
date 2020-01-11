@@ -1,10 +1,13 @@
-package com.rishi.dash3.Fragments
+package com.rishi.dash3.fragments
 
 
+import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.pm.PackageManager
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +15,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
@@ -21,6 +25,10 @@ import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.FileWriter
+import java.io.IOException
 
 
 class Settings : Fragment() {
@@ -94,10 +102,24 @@ class Settings : Fragment() {
         }
 
         view.findViewById<Button>(R.id.exportData).setOnClickListener {
-            var text = ""
-            context!!.openFileOutput(fileName, Context.MODE_PRIVATE).use {
-                it.write(text.toByteArray())
+            if(Environment.MEDIA_MOUNTED != (Environment.getExternalStorageState()) || !checkPer(Manifest.permission.WRITE_EXTERNAL_STORAGE, context!!))return@setOnClickListener
+            try {
+                val file = File(Environment.getExternalStorageDirectory(), "c.txt")
+                val fos = FileOutputStream(file)
+                fos.write(1)
+                fos.close()
+                Toast.makeText(context, "Done!",Toast.LENGTH_LONG).show()
+
+            } catch (e: IOException) {
+                e.printStackTrace()
+                Toast.makeText(context, "Failed!",Toast.LENGTH_LONG).show()
             }
+
+
+        }
+
+        view.findViewById<Button>(R.id.importData).setOnClickListener {
+
         }
 
         val set = realm.where(Settings::class.java).findFirst()!!
@@ -126,6 +148,10 @@ class Settings : Fragment() {
                 )
             ).show()
         }
+    }
+
+    private fun checkPer(per:String, context: Context):Boolean{
+        return ContextCompat.checkSelfPermission(context, per) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onDestroy() {

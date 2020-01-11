@@ -1,4 +1,4 @@
-package com.rishi.dash3.Activties
+package com.rishi.dash3.activties
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
@@ -15,7 +15,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.rishi.dash3.*
-import com.rishi.dash3.Adapters.InfoAdapter
+import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings

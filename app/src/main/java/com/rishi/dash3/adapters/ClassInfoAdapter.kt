@@ -1,4 +1,4 @@
-package com.rishi.dash3.Adapters
+package com.rishi.dash3.adapters
 
 import android.content.Context
 import android.util.Log
@@ -63,9 +63,9 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
                 //performing positive action
                 builder.setPositiveButton("Delete"){_, _ ->
                     if(clsses.map { it.id }.contains(crseClss.id)) {
-                        val pos = clsses.map { it.id }.indexOf(crseClss.id)
-                        Log.i("Got at pos ", pos.toString())
-                        clsses.removeAt(pos)
+                        val pos1 = clsses.map { it.id }.indexOf(crseClss.id)
+                        Log.i("Got at pos ", pos1.toString())
+                        clsses.removeAt(pos1)
                         notifyItemRemoved(crsePos)
                         notifyItemRangeChanged(crsePos, clsses.size)
                         //Toast.makeText(context,"delete  id " + crseClss.id,Toast.LENGTH_SHORT).show()
@@ -84,7 +84,7 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
                 alertDialog.show()
             }
             itemView.setOnClickListener {
-                Toast.makeText(context, "Day : "+crseClss.day, Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Course name : "+realm.where(EachCourse::class.java).equalTo("crsecode", cls.code).findFirst()?.crsename, Toast.LENGTH_SHORT).show()
             }
 
         }

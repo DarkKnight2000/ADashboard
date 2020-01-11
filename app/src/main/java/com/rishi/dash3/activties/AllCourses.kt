@@ -1,14 +1,7 @@
-package com.rishi.dash3.Activties
+package com.rishi.dash3.activties
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.rishi.dash3.Adapters.ClassesAdapter
-import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.R
 import io.realm.Realm
-import kotlinx.android.synthetic.main.activity_allcourses.*
 
 class AllCourses : AppCompatActivity(){
     lateinit var realm: Realm

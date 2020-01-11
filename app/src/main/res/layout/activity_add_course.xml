@@ -27,6 +27,8 @@
             android:hint="Name"
             android:textSize="25sp"
             android:layout_below="@id/textView"
+            android:inputType="textCapSentences"
+            android:paddingHorizontal="10dp"
             />
         <TextView
             android:text="Course Code"
@@ -44,9 +46,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/textView3"
-            android:hint="Code"
+            android:hint="-Code-"
             android:textSize="25sp"
             android:layout_below="@id/textView4"
+            android:inputType="textCapCharacters"
+            android:paddingHorizontal="10dp"
             />
 
         <TextView
@@ -86,6 +90,8 @@
             android:hint="Room no."
             android:textSize="25sp"
             android:layout_below="@id/roomLabel"
+            android:inputType="textCapSentences"
+            android:paddingHorizontal="10dp"
             />
 
         <TextView
