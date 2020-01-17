@@ -15,6 +15,7 @@ import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
+import com.rishi.dash3.weekDays
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_calendar.*
 
@@ -42,7 +43,6 @@ class CalendarFragment : Fragment() {
         view.findViewById<RecyclerView>(R.id.recyclerViewClassesDay).layoutManager = layoutManager
         val cal = Calendar.getInstance()
         var mDay = cal.get(Calendar.DAY_OF_WEEK)
-        val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         var mDate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(
             Calendar.YEAR)
         //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
@@ -80,6 +80,25 @@ class CalendarFragment : Fragment() {
         }
         calendarTT.setDate(calendarTT.getDate())
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        val settings = realm.where(Settings::class.java).findFirst()!!
+        val cal = Calendar.getInstance()
+        var mDay = cal.get(Calendar.DAY_OF_WEEK)
+        var mDate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(
+            Calendar.YEAR)
+        var eachCrseCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, "")).findAll()
+        //Toast.makeText(this.context!!, "$mDay $mDate", Toast.LENGTH_SHORT).show()
+        val adapterT = InfoAdapter(
+            this.context!!,
+            eachCrseCls.sortedWith(compareBy{ it.startTime }).toMutableList(),
+            false,
+            realm,
+            null
+        )
+        recyclerViewClassesDay.adapter = adapterT
     }
 
     override fun onDestroy() {

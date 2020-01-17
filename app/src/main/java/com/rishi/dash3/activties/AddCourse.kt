@@ -1,6 +1,7 @@
 package com.rishi.dash3.activties
 
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -10,6 +11,7 @@ import androidx.appcompat.widget.Toolbar
 import com.rishi.dash3.*
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
+import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*
 
@@ -125,6 +127,7 @@ class AddCourse : AppCompatActivity() {
             crse.defSlot = preSlots[slotSel.selectedItemPosition]
             crse.crseClsses.addAll(clsesCheck)
             realm.commitTransaction()
+            startService(Intent(this, NotifService::class.java))
             this.finish()
         }
     }

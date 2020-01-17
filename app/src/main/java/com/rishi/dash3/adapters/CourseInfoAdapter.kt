@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.activties.CourseInfo
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
+import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.course_list_card.view.*
 
@@ -70,6 +71,7 @@ class ClassesAdapter(val context: Context, val clsses:MutableList<EachCourse>, v
                         realm.commitTransaction()
                         notifyItemRemoved(crsePos)
                         notifyItemRangeChanged(crsePos,clsses.size)
+                        context.startService(Intent(context, NotifService::class.java))
                         //Toast.makeText(context, "Deleted at, Size " + clsses.size, Toast.LENGTH_SHORT).show()
                     }
                     else

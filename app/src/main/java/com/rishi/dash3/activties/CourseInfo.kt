@@ -2,6 +2,7 @@ package com.rishi.dash3.activties
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -19,6 +20,7 @@ import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings
+import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.exceptions.RealmException
@@ -150,6 +152,7 @@ class CourseInfo: AppCompatActivity(){
 
             }
             //this.onDestroy()
+            startService(Intent(this, NotifService::class.java))
             this.finish()
         }
         weekly.isChecked = true

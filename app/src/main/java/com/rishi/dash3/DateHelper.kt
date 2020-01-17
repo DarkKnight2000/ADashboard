@@ -23,6 +23,8 @@ fun intToTime(value:Int):String{
 
 val sdf = SimpleDateFormat("dd/MM/yyyy")
 
+val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
+
 fun isGreaterDate(a:String, b:String):Boolean{
     val ad: Date
     try {

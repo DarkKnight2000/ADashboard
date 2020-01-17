@@ -2,39 +2,50 @@ package com.rishi.dash3.fragments
 
 
 import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.util.Calendar
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.storage.StorageManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.MimeTypeMap
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import com.rishi.dash3.BuildConfig
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
+import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.io.File
 import java.io.FileOutputStream
-import java.io.FileWriter
 import java.io.IOException
 
 
 class Settings : Fragment() {
 
     lateinit var realm: Realm
-    val fileName = "Data.txt"
+    private val fileName = "SampleFile.txt"
+    private val filepath = "Timetable App"
+    private lateinit var myExternalFile:File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +59,8 @@ class Settings : Fragment() {
             set.seg1End = "11/12/2019"
             realm.commitTransaction()
         }
+        context?.startService(Intent(context, NotifService::class.java))
+
     }
 
     override fun onCreateView(
@@ -77,7 +90,7 @@ class Settings : Fragment() {
                 c.day = c.day.substring(0,4) + getSeg(c.date, set.semStart, set.seg1End, set.seg2End, set.seg3End)
             }
             realm.commitTransaction()
-            Toast.makeText(this.context!!, "Updated", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context!!, "Updated", Toast.LENGTH_SHORT).show()
         }
 
         view.findViewById<Button>(R.id.reset).setOnClickListener{
@@ -102,25 +115,33 @@ class Settings : Fragment() {
         }
 
         view.findViewById<Button>(R.id.exportData).setOnClickListener {
-            if(Environment.MEDIA_MOUNTED != (Environment.getExternalStorageState()) || !checkPer(Manifest.permission.WRITE_EXTERNAL_STORAGE, context!!))return@setOnClickListener
             try {
-                val file = File(Environment.getExternalStorageDirectory(), "c.txt")
-                val fos = FileOutputStream(file)
-                fos.write(1)
-                fos.close()
-                Toast.makeText(context, "Done!",Toast.LENGTH_LONG).show()
-
+                Toast.makeText(context, "${checkPer(context, this)}", Toast.LENGTH_SHORT).show()
+                if(isExternalStorageAvailable() && checkPer(context, this)){
+                    val fileOutPutStream = FileOutputStream(myExternalFile)
+                    fileOutPutStream.write("123".toByteArray())
+                    fileOutPutStream.close()
+                    Toast.makeText(context, "Saved! ${myExternalFile.absolutePath}", Toast.LENGTH_LONG).show()
+                    val sendIntent = Intent(Intent.ACTION_VIEW)
+                    sendIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                    val uri = FileProvider.getUriForFile(context!!, context?.applicationContext?.packageName + ".provider", myExternalFile)
+                    sendIntent.setDataAndType(uri, /*MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(fileName))*/"text/*")
+                    if(sendIntent.resolveActivity(activity!!.packageManager) != null)
+                    //val shareIntent = Intent.createChooser(sendIntent, "Sharing with")
+                    startActivity(sendIntent)
+                }
             } catch (e: IOException) {
                 e.printStackTrace()
-                Toast.makeText(context, "Failed!",Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
             }
-
-
         }
 
         view.findViewById<Button>(R.id.importData).setOnClickListener {
 
         }
+
+        myExternalFile = File(activity?.getExternalFilesDir(filepath), fileName)
+        //if(!myExternalFile.exists()) myExternalFile.createNewFile()
 
         val set = realm.where(Settings::class.java).findFirst()!!
         view.findViewById<TextView>(R.id.semStart).text = set.semStart
@@ -150,8 +171,53 @@ class Settings : Fragment() {
         }
     }
 
-    private fun checkPer(per:String, context: Context):Boolean{
-        return ContextCompat.checkSelfPermission(context, per) == PackageManager.PERMISSION_GRANTED
+    private fun isExternalStorageReadOnly():Boolean {
+        val extStorageState = Environment.getExternalStorageState()
+        if (Environment.MEDIA_MOUNTED_READ_ONLY == (extStorageState)) {
+            return true
+        }
+        return false
+    }
+
+    private fun isExternalStorageAvailable():Boolean {
+        val extStorageState = Environment.getExternalStorageState()
+        if (Environment.MEDIA_MOUNTED == (extStorageState)) {
+            return true
+        }
+        return false
+    }
+
+    private fun checkPer(context:Context?, t:Fragment):Boolean{
+        if(context != null && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) return true
+            ActivityCompat.requestPermissions(t.activity as Activity,
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            2)
+        return false
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+        when (requestCode) {
+            2 -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    view?.findViewById<Button>(R.id.exportData)?.performClick()
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(context, "Permission needed to share files!", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+
+            // Add other 'when' lines to check for other
+            // permissions this app might request.
+            else -> {
+                // Ignore all other requests.
+            }
+        }
     }
 
     override fun onDestroy() {

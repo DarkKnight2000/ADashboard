@@ -26,6 +26,22 @@
         </activity>
         <activity android:name=".activties.CourseInfo"/>
         <activity android:name=".activties.AddCourse"/>
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:grantUriPermissions="true"
+            android:exported="false">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+        <service android:name=".services.NotifService" />
+        <receiver
+            android:name=".services.SensorRestarter"
+            android:enabled="true"
+            android:exported="true"
+            android:label="RestartServiceWhenStopped">
+        </receiver>
     </application>
 
 </manifest>
