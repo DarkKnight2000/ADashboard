@@ -1,7 +1,11 @@
 package com.rishi.dash3.activties
 
+import android.app.PendingIntent
+import android.content.Intent
+import android.icu.util.Calendar
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.get
@@ -10,6 +14,8 @@ import com.rishi.dash3.fragments.AllCourseFrag
 import com.rishi.dash3.fragments.CalendarFragment
 import com.rishi.dash3.fragments.Settings
 import com.rishi.dash3.R
+import com.rishi.dash3.services.NotifService
+import com.rishi.dash3.services.SensorRestarter
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 

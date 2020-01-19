@@ -127,7 +127,7 @@ class AddCourse : AppCompatActivity() {
             crse.defSlot = preSlots[slotSel.selectedItemPosition]
             crse.crseClsses.addAll(clsesCheck)
             realm.commitTransaction()
-            startService(Intent(this, NotifService::class.java))
+            //startService(Intent(this, NotifService::class.java))
             this.finish()
         }
     }

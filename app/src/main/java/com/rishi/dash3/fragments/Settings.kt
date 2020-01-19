@@ -59,7 +59,7 @@ class Settings : Fragment() {
             set.seg1End = "11/12/2019"
             realm.commitTransaction()
         }
-        context?.startService(Intent(context, NotifService::class.java))
+        //context?.startService(Intent(context, NotifService::class.java))
 
     }
 

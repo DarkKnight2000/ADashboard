@@ -12,14 +12,10 @@ import androidx.core.content.ContextCompat.getSystemService
 class SensorRestarter: BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent?) {
         Log.i(
-            SensorRestarter::class.java.simpleName,
+            "mytime",
             "Service Stops! Oooooooooooooppppssssss!!!!"
         )
 
-        val alarm = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        alarm[AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+5000] =
-            PendingIntent.getService(context, 0, Intent(context, NotifService::class.java), 0)
-        //context.startService(Intent(context, NotifService::class.java))
+        context.startService(Intent(context, NotifService::class.java))
     }
 }

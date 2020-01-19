@@ -35,7 +35,8 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
-        <service android:name=".services.NotifService" />
+        <service android:name=".services.NotifService"
+            android:process=":NotifServ"/>
         <receiver
             android:name=".services.SensorRestarter"
             android:enabled="true"

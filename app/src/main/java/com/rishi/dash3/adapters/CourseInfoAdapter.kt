@@ -71,7 +71,7 @@ class ClassesAdapter(val context: Context, val clsses:MutableList<EachCourse>, v
                         realm.commitTransaction()
                         notifyItemRemoved(crsePos)
                         notifyItemRangeChanged(crsePos,clsses.size)
-                        context.startService(Intent(context, NotifService::class.java))
+                        //context.startService(Intent(context, NotifService::class.java))
                         //Toast.makeText(context, "Deleted at, Size " + clsses.size, Toast.LENGTH_SHORT).show()
                     }
                     else

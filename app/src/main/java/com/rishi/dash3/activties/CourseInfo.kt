@@ -41,10 +41,11 @@ class CourseInfo: AppCompatActivity(){
         textView2.text = bundle?.getString("name")
         textView3.text = bundle?.getString("code")
         textView6.text = bundle?.getString("slot")
-        startTime.text = "Pick Time"
-        endTime.text = "Pick Time"
+        val calendar = Calendar.getInstance()
+        startTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+2)
+        endTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+3)
         dateSelector.text  = "Pick Date"
-        var dateSelectedDay = 7
+        var dateSelectedDay = calendar.get(Calendar.DAY_OF_WEEK)
         val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         val settings = realm.where(Settings::class.java).findFirst()!!
 
@@ -124,6 +125,8 @@ class CourseInfo: AppCompatActivity(){
                 alertDialog.setCanceledOnTouchOutside(true)
                 alertDialog.show()
             }
+            startTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+3)
+            endTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+4)
         }
 
 
@@ -152,7 +155,7 @@ class CourseInfo: AppCompatActivity(){
 
             }
             //this.onDestroy()
-            startService(Intent(this, NotifService::class.java))
+            //startService(Intent(this, NotifService::class.java))
             this.finish()
         }
         weekly.isChecked = true
