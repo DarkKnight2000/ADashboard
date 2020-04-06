@@ -32,7 +32,7 @@ import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
-import com.rishi.dash3.services.NotifService
+//import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.io.File
@@ -114,7 +114,7 @@ class Settings : Fragment() {
             alertDialog.show()
         }
 
-        view.findViewById<Button>(R.id.exportData).setOnClickListener {
+        /*view.findViewById<Button>(R.id.exportData).setOnClickListener {
             try {
                 Toast.makeText(context, "${checkPer(context, this)}", Toast.LENGTH_SHORT).show()
                 if(isExternalStorageAvailable() && checkPer(context, this)){
@@ -142,6 +142,8 @@ class Settings : Fragment() {
 
         myExternalFile = File(activity?.getExternalFilesDir(filepath), fileName)
         //if(!myExternalFile.exists()) myExternalFile.createNewFile()
+        */
+         */
 
         val set = realm.where(Settings::class.java).findFirst()!!
         view.findViewById<TextView>(R.id.semStart).text = set.semStart
@@ -171,7 +173,7 @@ class Settings : Fragment() {
         }
     }
 
-    private fun isExternalStorageReadOnly():Boolean {
+    /*private fun isExternalStorageReadOnly():Boolean {
         val extStorageState = Environment.getExternalStorageState()
         if (Environment.MEDIA_MOUNTED_READ_ONLY == (extStorageState)) {
             return true
@@ -218,7 +220,7 @@ class Settings : Fragment() {
                 // Ignore all other requests.
             }
         }
-    }
+    }*/
 
     override fun onDestroy() {
         super.onDestroy()

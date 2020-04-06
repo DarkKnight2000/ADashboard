@@ -134,5 +134,21 @@
             android:layout_marginTop="20dp"
             android:id="@+id/addCrse"
             />
+
+        <Button
+            android:id="@+id/btnStartAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Alarm"
+            android:layout_below="@id/addCrse"
+            />
+
+        <Button
+            android:id="@+id/btnCancelAlarm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel Alarm"
+            android:layout_below="@id/btnStartAlarm"
+            />
     </RelativeLayout>
 </ScrollView>

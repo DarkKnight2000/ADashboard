@@ -14,8 +14,8 @@ import com.rishi.dash3.fragments.AllCourseFrag
 import com.rishi.dash3.fragments.CalendarFragment
 import com.rishi.dash3.fragments.Settings
 import com.rishi.dash3.R
-import com.rishi.dash3.services.NotifService
-import com.rishi.dash3.services.SensorRestarter
+//import com.rishi.dash3.services.NotifService
+//import com.rishi.dash3.services.SensorRestarter
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -45,7 +45,9 @@ class MainActivity : AppCompatActivity() {
             set.seg3End = "25/12/2019"
             set.seg1End = "11/12/2019"
             realm.commitTransaction()
-            supportFragmentManager.beginTransaction().replace(R.id.frame_container, sets, tags[2]).commit()
+            val transaction = supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frame_container, sets, tags[2])
+            transaction.commit()
             botNav.selectedItemId = R.id.navigation_set
             tool?.title = titles[2]
             Toast.makeText(this, "Set semester dates to get started", Toast.LENGTH_LONG).show()

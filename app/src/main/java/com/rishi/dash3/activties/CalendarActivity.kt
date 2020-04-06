@@ -8,7 +8,7 @@ class CalendarActivity : AppCompatActivity(){
 
     /*override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_calendar)
+        setContentView(R.layout.fragment_calendar)
         realm = Realm.getDefaultInstance()
         val settings = realm.where(Settings::class.java).findFirst()!!
 

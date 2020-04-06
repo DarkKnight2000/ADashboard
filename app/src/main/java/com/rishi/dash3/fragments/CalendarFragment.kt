@@ -1,28 +1,25 @@
 package com.rishi.dash3.fragments
 
 
-import android.app.PendingIntent
-import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.CalendarView
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
+import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.getSeg
-import com.rishi.dash3.services.NotifService
-import com.rishi.dash3.services.SensorRestarter
 import com.rishi.dash3.weekDays
 import io.realm.Realm
-import kotlinx.android.synthetic.main.activity_calendar.*
+import kotlinx.android.synthetic.main.fragment_calendar.*
+
 
 class CalendarFragment : Fragment() {
 
@@ -38,7 +35,7 @@ class CalendarFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.activity_calendar, container, false)
+        val view = inflater.inflate(R.layout.fragment_calendar, container, false)
         val settings = realm.where(Settings::class.java).findFirst()!!
 
         val calendarTT = view.findViewById<CalendarView>(R.id.calendarTT)
@@ -84,6 +81,7 @@ class CalendarFragment : Fragment() {
             dummy.height = recyclerViewClassesDay.height
         }
         calendarTT.setDate(calendarTT.getDate())
+
         return view
     }
 

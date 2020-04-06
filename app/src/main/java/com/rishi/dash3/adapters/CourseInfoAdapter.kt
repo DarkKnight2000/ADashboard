@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.activties.CourseInfo
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
-import com.rishi.dash3.services.NotifService
+//import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.course_list_card.view.*
 

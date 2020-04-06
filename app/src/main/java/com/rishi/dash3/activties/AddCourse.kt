@@ -1,19 +1,25 @@
 package com.rishi.dash3.activties
 
 
+//import com.rishi.dash3.services.NotifService
+
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import com.rishi.dash3.*
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.services.NotifService
+import com.rishi.dash3.notifications.NotifBroadcastRcvr
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*
+
 
 class AddCourse : AppCompatActivity() {
 
@@ -35,6 +41,7 @@ class AddCourse : AppCompatActivity() {
         val segSel = findViewById<Spinner>(R.id.segSel)
         //val preCls= findViewById<TextView>(R.id.defClses)
         val classMap:HashMap<String, ArrayList<String>> = HashMap()
+        classMap["-None-"] = arrayListOf()
         classMap["A"] = arrayListOf("Mon 09:00 10:00", "Wed 11:00 12:00", "Thu 10:00 11:00")
         classMap["B"] = arrayListOf("Mon 10:00 11:00", "Wed 09:00 10:00", "Thu 11:00 12:00")
         classMap["C"] = arrayListOf("Mon 11:00 12:00", "Wed 10:00 11:00", "Thu 09:00 10:00")
@@ -50,7 +57,6 @@ class AddCourse : AppCompatActivity() {
         classMap["X"] = arrayListOf("Mon 19:00 20:30", "Thu 19:00 20:30")
         classMap["Y"] = arrayListOf("Tue 17:30 19:00", "Fri 17:30 19:00")
         classMap["Z"] = arrayListOf("Tue 19:00 20:30", "Fri 19:00 20:30")
-        classMap["None"] = arrayListOf()
         val segMap:HashMap<String, ArrayList<String>> = HashMap()
         segMap["1-2"] =  arrayListOf("1-2")
         segMap["1-4"] = arrayListOf("1-2","3-4")
@@ -130,6 +136,28 @@ class AddCourse : AppCompatActivity() {
             //startService(Intent(this, NotifService::class.java))
             this.finish()
         }
+
+
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+        val alarmIntent = Intent(this, NotifBroadcastRcvr::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0)
+
+        findViewById<Button>(R.id.btnStartAlarm).setOnClickListener {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
+            } else {
+                alarmManager.set(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
+            }
+        }
+        findViewById<Button>(R.id.btnCancelAlarm).setOnClickListener {
+            alarmManager.cancel(pendingIntent);
+            Toast.makeText(applicationContext, "Alarm Cancelled", Toast.LENGTH_LONG).show();
+        }
+
+
     }
 
     override fun onDestroy() {

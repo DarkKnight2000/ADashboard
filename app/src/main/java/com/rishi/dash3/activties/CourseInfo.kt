@@ -20,7 +20,7 @@ import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings
-import com.rishi.dash3.services.NotifService
+//import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.exceptions.RealmException
