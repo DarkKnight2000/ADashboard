@@ -1,12 +1,13 @@
 package com.rishi.dash3
 
 import com.rishi.dash3.Models.EachClass
+import com.rishi.dash3.Models.Settings
 import io.realm.Realm
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun timeToInt(date:String):Int{
-    val form = date.split(":")
+fun timeToInt(time:String):Int{
+    val form = time.split(":")
     var res = 0
     res += form[0].toInt()*60
     res += form[1].toInt()
@@ -48,6 +49,10 @@ fun getSeg(a:String, s1:String, s2:String, s3:String, s4:String):String{
     else if(!isGreaterDate(a,s3)) return "3-4"
     else if(!isGreaterDate(a,s4)) return "5-6"
     else return ""
+}
+
+fun getSeg(a:String, s:Settings):String{
+    return getSeg(a, s.semStart, s.seg1End, s.seg2End, s.seg3End)
 }
 
 

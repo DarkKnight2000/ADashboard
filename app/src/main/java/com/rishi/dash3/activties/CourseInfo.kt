@@ -2,7 +2,6 @@ package com.rishi.dash3.activties
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
@@ -20,7 +19,7 @@ import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings
-//import com.rishi.dash3.services.NotifService
+import com.rishi.dash3.notifications.restartNotifService
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.exceptions.RealmException
@@ -46,6 +45,7 @@ class CourseInfo: AppCompatActivity(){
         endTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+3)
         dateSelector.text  = "Pick Date"
         var dateSelectedDay = calendar.get(Calendar.DAY_OF_WEEK)
+        daySpinner.setSelection(calendar.get(Calendar.DAY_OF_WEEK) - 1)
         val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         val settings = realm.where(Settings::class.java).findFirst()!!
 
@@ -148,6 +148,7 @@ class CourseInfo: AppCompatActivity(){
                 realmObj.crseClsses.addAll(presCls)
                 realm.commitTransaction()
                 Toast.makeText(this,"Updated!!!",Toast.LENGTH_SHORT).show()
+                restartNotifService(this)
                 //for(c in  presCls) Log.i("Got tags2 ", c.id.toString())
 
             }catch (e: RealmException){

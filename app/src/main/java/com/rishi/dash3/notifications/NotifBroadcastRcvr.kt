@@ -13,14 +13,14 @@ class NotifBroadcastRcvr : BroadcastReceiver() {
             "Alarm Manager just ran1",
             Toast.LENGTH_SHORT
         ).show()*/
-        Log.i("Broadcast", "Fired1")
+        Log.i("Broadcast", "Fired1 with id ${intent.getLongExtra("ClassId", -1)}")
 
         //val serviceIntent = Intent(context, NotifService::class.java)
         //context.startService(serviceIntent)
 
         val mIntent = Intent(context, NotifService::class.java)
-        mIntent.putExtra("maxCountValue", 1000)
-        enqueueWork(context, intent)
-
+        mIntent.putExtra("ClassId", intent.getLongExtra("ClassId", (-1).toLong()))
+        enqueueWork(context, mIntent)
+        Log.i("Broadcast", "Fired ended")
     }
 }

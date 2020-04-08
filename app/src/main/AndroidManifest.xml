@@ -24,8 +24,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activties.CourseInfo"/>
-        <activity android:name=".activties.AddCourse"/>
+        <activity android:name=".activties.CourseInfo"
+            android:parentActivityName=".activties.MainActivity"
+            />
+        <activity android:name=".activties.AddCourse"
+            android:parentActivityName=".activties.MainActivity"
+            />
 
 
         <receiver

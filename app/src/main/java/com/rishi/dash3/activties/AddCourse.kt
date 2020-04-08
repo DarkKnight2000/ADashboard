@@ -17,6 +17,7 @@ import com.rishi.dash3.*
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.notifications.NotifBroadcastRcvr
+import com.rishi.dash3.notifications.restartNotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*
 
@@ -103,7 +104,6 @@ class AddCourse : AppCompatActivity() {
             for(s in segMap[segSel.selectedItem]!!.toTypedArray()) {
                 for (c in clses) {
                     val cls = EachClass()
-                    cls.id = initID++
                     val c1 = c.split(" ")
                     if (c1.size < 3) continue
                     cls.startTime = timeToInt(c1[1])
@@ -124,6 +124,7 @@ class AddCourse : AppCompatActivity() {
                         alertDialog.show()
                         return@setOnClickListener
                     }
+                    cls.id = initID++
                     clsesCheck.add(cls)
                 }
             }
@@ -133,30 +134,12 @@ class AddCourse : AppCompatActivity() {
             crse.defSlot = preSlots[slotSel.selectedItemPosition]
             crse.crseClsses.addAll(clsesCheck)
             realm.commitTransaction()
+            if(clsesCheck.isNotEmpty()){
+                restartNotifService(this)
+            }
             //startService(Intent(this, NotifService::class.java))
             this.finish()
         }
-
-
-        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-
-        val alarmIntent = Intent(this, NotifBroadcastRcvr::class.java)
-        val pendingIntent = PendingIntent.getBroadcast(this, 0, alarmIntent, 0)
-
-        findViewById<Button>(R.id.btnStartAlarm).setOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                alarmManager.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                alarmManager.setExact(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
-            } else {
-                alarmManager.set(AlarmManager.RTC_WAKEUP, 0, pendingIntent);
-            }
-        }
-        findViewById<Button>(R.id.btnCancelAlarm).setOnClickListener {
-            alarmManager.cancel(pendingIntent);
-            Toast.makeText(applicationContext, "Alarm Cancelled", Toast.LENGTH_LONG).show();
-        }
-
 
     }
 
