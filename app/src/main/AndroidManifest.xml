@@ -25,10 +25,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".activties.CourseInfo"
-            android:parentActivityName=".activties.MainActivity"
             />
         <activity android:name=".activties.AddCourse"
-            android:parentActivityName=".activties.MainActivity"
             />
 
 

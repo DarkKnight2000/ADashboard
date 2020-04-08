@@ -35,6 +35,7 @@
             android:layout_marginTop="40dp"
             android:layout_below="@id/calendarTT"
             android:nestedScrollingEnabled="false"
+            android:padding="5dp"
             />
 
 

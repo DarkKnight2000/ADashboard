@@ -79,14 +79,13 @@
             android:layout_marginTop="40dp"
             android:id="@+id/clsEditor"
             app:cardCornerRadius="10dp"
-
-
-
+            android:foregroundGravity="center_horizontal"
             >
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="20dp"
+                android:gravity="center_horizontal"
                 >
                 <RadioGroup
                     android:layout_width="wrap_content"
@@ -96,25 +95,22 @@
                     android:layout_centerHorizontal="true">
 
                     <RadioButton
-                        android:id="@+id/one"
+                        android:id="@+id/radio_one"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1-2"
                         android:checked="true"
                         android:paddingHorizontal="15dp"/>
 
                     <RadioButton
-                        android:id="@+id/two"
+                        android:id="@+id/radio_two"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text= "3-4"
                         android:paddingHorizontal="15dp"
                         />
                     <RadioButton
-                        android:id="@+id/three"
+                        android:id="@+id/radio_three"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text= "5-6"
                         android:paddingHorizontal="15dp"
                         />
 
@@ -125,8 +121,10 @@
                     android:text="Date"
                     android:textStyle="bold"
                     android:id="@+id/extraClsDateLabel"
-                    android:padding="15dp"
-                    android:layout_marginTop="15sp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="15dp"
                     android:layout_below="@id/segSelector"
                     />
                 <Spinner
@@ -145,7 +143,10 @@
                     android:layout_alignStart="@id/startTime"
                     android:layout_alignTop="@id/extraClsDateLabel"
                     android:id="@+id/dateSelector"
-                    android:padding="15dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingBottom="10dp"
+                    android:paddingTop="15dp"
                     />
 
                 <TextView
@@ -164,7 +165,6 @@
                     android:padding="10dp"
                     android:layout_toRightOf="@id/startLabel"
                     android:layout_below="@id/extraClsDateLabel"
-                    android:onClick="showTimePickerDialogS"
                     android:id="@+id/startTime"/>
                 <TextView
                     android:layout_width="wrap_content"
@@ -183,7 +183,6 @@
                     android:layout_toRightOf="@id/endLabel"
                     android:layout_alignLeft="@id/startTime"
                     android:layout_below="@id/startLabel"
-                    android:onClick="showTimePickerDialogE"
                     android:id="@+id/endTime"/>
 
                 <EditText

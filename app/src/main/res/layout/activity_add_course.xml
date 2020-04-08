@@ -101,10 +101,8 @@
             android:id="@+id/textView6"
             android:textSize="15sp"
             android:textStyle="bold"
-            android:layout_marginLeft="200dp"
+            android:layout_marginStart="200dp"
             android:layout_alignTop="@id/roomLabel"
-
-
             />
         <Spinner
             android:layout_width="wrap_content"
@@ -114,20 +112,32 @@
             android:layout_alignTop="@id/room"
             android:layout_alignStart="@id/textView6"
             />
+        <TextView
+            android:text="This will add the following default classes :"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/curClsLabel"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            android:layout_below="@id/room"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="30dp"
+            android:layout_marginStart="20dp"
+            />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/defClses"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/room"
+            android:layout_below="@id/curClsLabel"
             android:textSize="20sp"
             android:layout_marginTop="40dp"
             />
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
             android:layout_below="@id/defClses"
             android:text="Add Course"
             android:layout_centerHorizontal="true"

@@ -3,12 +3,9 @@ package com.rishi.dash3.activties
 
 //import com.rishi.dash3.services.NotifService
 
-import android.app.AlarmManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
@@ -16,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import com.rishi.dash3.*
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.notifications.NotifBroadcastRcvr
 import com.rishi.dash3.notifications.restartNotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*
@@ -29,8 +25,8 @@ class AddCourse : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_course)
-        actionBar?.title = "Add Course"
-        actionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Add Course"
         realm = Realm.getDefaultInstance()
 
         // Inflate the layout for this fragment
@@ -42,7 +38,7 @@ class AddCourse : AppCompatActivity() {
         val segSel = findViewById<Spinner>(R.id.segSel)
         //val preCls= findViewById<TextView>(R.id.defClses)
         val classMap:HashMap<String, ArrayList<String>> = HashMap()
-        classMap["-None-"] = arrayListOf()
+        classMap["--"] = arrayListOf()
         classMap["A"] = arrayListOf("Mon 09:00 10:00", "Wed 11:00 12:00", "Thu 10:00 11:00")
         classMap["B"] = arrayListOf("Mon 10:00 11:00", "Wed 09:00 10:00", "Thu 11:00 12:00")
         classMap["C"] = arrayListOf("Mon 11:00 12:00", "Wed 10:00 11:00", "Thu 09:00 10:00")
@@ -59,12 +55,12 @@ class AddCourse : AppCompatActivity() {
         classMap["Y"] = arrayListOf("Tue 17:30 19:00", "Fri 17:30 19:00")
         classMap["Z"] = arrayListOf("Tue 19:00 20:30", "Fri 19:00 20:30")
         val segMap:HashMap<String, ArrayList<String>> = HashMap()
-        segMap["1-2"] =  arrayListOf("1-2")
-        segMap["1-4"] = arrayListOf("1-2","3-4")
-        segMap["3-4"] =  arrayListOf("3-4")
-        segMap["1-6"] = arrayListOf("1-2","3-4","5-6")
-        segMap["3-6"] = arrayListOf("3-4","5-6")
-        segMap["5-6"] = arrayListOf("5-6")
+        segMap["1"] =  arrayListOf(part1_code)
+        segMap["1-2"] = arrayListOf(part1_code,part2_code)
+        segMap["1-3"] =  arrayListOf(part1_code,part2_code,part3_code)
+        segMap["2"] = arrayListOf(part2_code)
+        segMap["2-3"] = arrayListOf(part2_code,part3_code)
+        segMap["3"] = arrayListOf(part3_code)
         val preSlots = classMap.keys.toTypedArray()
         val preSegs = segMap.keys.toTypedArray()
 
@@ -76,7 +72,8 @@ class AddCourse : AppCompatActivity() {
                 Toast.makeText(this@AddCourse, "Selected " + preSlots[position], Toast.LENGTH_SHORT).show()
                 val arr = classMap[preSlots[position]]
                 var str = ""
-                if(arr != null) for(a in arr) str += a + "\n"
+                if(arr!= null && arr.size != 0) for(a in arr) str += a + "\n"
+                else str = "-"
                 defClses.text = str
             }
 
@@ -138,9 +135,46 @@ class AddCourse : AppCompatActivity() {
                 restartNotifService(this)
             }
             //startService(Intent(this, NotifService::class.java))
+            Toast.makeText(this,"Added Course to your list :)",Toast.LENGTH_SHORT).show()
             this.finish()
         }
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return true
+    }
+
+    override fun onBackPressed() {
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Warning!!")
+        //set message for alert dialog
+        builder.setMessage("Are you sure you want to go back? All your changes will be lost!")
+
+        //performing positive action
+        builder.setPositiveButton("Go back"){_, _ ->
+            super.onBackPressed()
+        }
+        //performing cancel action
+        builder.setNeutralButton("Stay"){_ , _ ->
+            //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCanceledOnTouchOutside(true)
+        alertDialog.show()
     }
 
     override fun onDestroy() {

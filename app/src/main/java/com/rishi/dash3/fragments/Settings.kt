@@ -114,6 +114,8 @@ class Settings : Fragment() {
             alertDialog.show()
         }
 
+        // TODO: Add notificatins setting here
+
         /*view.findViewById<Button>(R.id.exportData).setOnClickListener {
             try {
                 Toast.makeText(context, "${checkPer(context, this)}", Toast.LENGTH_SHORT).show()

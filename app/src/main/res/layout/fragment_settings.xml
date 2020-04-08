@@ -1,15 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    android:layout_height="match_parent"
+<RelativeLayout android:layout_height="match_parent"
     android:layout_width="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:padding="20dp"
-    android:layout_gravity="center_vertical">
+    >
+
+    <androidx.cardview.widget.CardView android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:id="@+id/semCard"
+        app:cardCornerRadius="10dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="30dp"
+            >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sem Start"
+        android:text="Part1 Start"
         android:id="@+id/semStartLabel"
         android:padding="10dp"
         android:textSize="20sp"
@@ -29,7 +42,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seg3 Start"
+        android:text="Part2 Start"
         android:id="@+id/seg1Label"
         android:padding="10dp"
         android:layout_below="@id/semStartLabel"
@@ -50,7 +63,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Seg5 Start"
+        android:text="Part3 Start"
         android:id="@+id/seg2Label"
         android:padding="10dp"
         android:layout_below="@id/seg1Label"
@@ -71,7 +84,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sem End"
+        android:text="Part3 End"
         android:id="@+id/seg3Label"
         android:padding="10dp"
         android:layout_below="@id/seg2Label"
@@ -95,28 +108,31 @@
         android:text="Update"
         android:layout_centerHorizontal="true"
         android:layout_below="@id/seg3Label"
-        android:layout_marginTop="45dp"
+        android:layout_marginTop="25dp"
         android:id="@+id/updateSem"
         />
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reset"
-        android:layout_below="@id/updateSem"
+        android:layout_below="@id/semCard"
         android:layout_centerHorizontal="true"
         android:id="@+id/reset"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         />
 
-    <Button
+    <!--<Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Import"
         android:layout_below="@id/reset"
         android:id="@+id/importData"
-        android:layout_alignStart="@id/seg3Label"
-        android:layout_marginTop="80dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="30dp"
         />
 
     <Button
@@ -127,5 +143,5 @@
         android:id="@+id/exportData"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/importData"
-        />
+        />-->
 </RelativeLayout>

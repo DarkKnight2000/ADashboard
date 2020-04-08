@@ -6,6 +6,8 @@ import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -34,6 +36,8 @@ class CourseInfo: AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_courseinfo)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "Edit Course"
         realm = Realm.getDefaultInstance()
 
         val bundle :Bundle? = intent.extras
@@ -41,13 +45,14 @@ class CourseInfo: AppCompatActivity(){
         textView3.text = bundle?.getString("code")
         textView6.text = bundle?.getString("slot")
         val calendar = Calendar.getInstance()
-        startTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+2)
-        endTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+3)
         dateSelector.text  = "Pick Date"
         var dateSelectedDay = calendar.get(Calendar.DAY_OF_WEEK)
         daySpinner.setSelection(calendar.get(Calendar.DAY_OF_WEEK) - 1)
-        val weekDays = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
         val settings = realm.where(Settings::class.java).findFirst()!!
+
+
+        // startTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+2)
+        // endTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+3)
 
 
         val layoutManager = LinearLayoutManager(this)
@@ -125,8 +130,9 @@ class CourseInfo: AppCompatActivity(){
                 alertDialog.setCanceledOnTouchOutside(true)
                 alertDialog.show()
             }
-            startTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+3)
-            endTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+4)
+
+            // startTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+3)
+            // endTime.text = intToTime(calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+4)
         }
 
 
@@ -147,7 +153,7 @@ class CourseInfo: AppCompatActivity(){
                 realmObj.crseClsses.deleteAllFromRealm()
                 realmObj.crseClsses.addAll(presCls)
                 realm.commitTransaction()
-                Toast.makeText(this,"Updated!!!",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this,"Updated Classes :)",Toast.LENGTH_SHORT).show()
                 restartNotifService(this)
                 //for(c in  presCls) Log.i("Got tags2 ", c.id.toString())
 
@@ -231,7 +237,47 @@ class CourseInfo: AppCompatActivity(){
             DatePickerDialog(this,dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
         }
 
+        // Setting texts for segment choosing buttons
+        radio_one.text = part1_code
+        radio_two.text = part2_code
+        radio_three.text = part3_code
+    }
 
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        return true
+    }
+
+    override fun onBackPressed() {
+
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Warning!!")
+        //set message for alert dialog
+        builder.setMessage("Are you sure you want to go back? All your changes will be lost!")
+
+        //performing positive action
+        builder.setPositiveButton("Go back"){_, _ ->
+            super.onBackPressed()
+        }
+        //performing cancel action
+        builder.setNeutralButton("Stay"){_ , _ ->
+            //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
+        }
+        // Create the AlertDialog
+        val alertDialog: AlertDialog = builder.create()
+        // Set other dialog properties
+        alertDialog.setCanceledOnTouchOutside(true)
+        alertDialog.show()
     }
 
     override fun onDestroy() {
