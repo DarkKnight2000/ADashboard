@@ -14,6 +14,7 @@ import com.rishi.dash3.*
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.notifications.restartNotifService
+import com.rishi.dash3.notifications.sendNotif
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*
 
@@ -131,7 +132,7 @@ class AddCourse : AppCompatActivity() {
             crse.defSlot = preSlots[slotSel.selectedItemPosition]
             crse.crseClsses.addAll(clsesCheck)
             realm.commitTransaction()
-            if(clsesCheck.isNotEmpty()){
+            if(clsesCheck.isNotEmpty() && sendNotif){
                 restartNotifService(this)
             }
             //startService(Intent(this, NotifService::class.java))

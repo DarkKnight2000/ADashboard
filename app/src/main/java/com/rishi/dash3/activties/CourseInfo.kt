@@ -22,6 +22,7 @@ import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.notifications.restartNotifService
+import com.rishi.dash3.notifications.sendNotif
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.exceptions.RealmException
@@ -154,7 +155,7 @@ class CourseInfo: AppCompatActivity(){
                 realmObj.crseClsses.addAll(presCls)
                 realm.commitTransaction()
                 Toast.makeText(this,"Updated Classes :)",Toast.LENGTH_SHORT).show()
-                restartNotifService(this)
+                if(sendNotif) restartNotifService(this)
                 //for(c in  presCls) Log.i("Got tags2 ", c.id.toString())
 
             }catch (e: RealmException){

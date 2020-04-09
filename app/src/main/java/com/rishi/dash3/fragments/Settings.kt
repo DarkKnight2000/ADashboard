@@ -17,10 +17,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.MimeTypeMap
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -32,6 +31,9 @@ import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
+import com.rishi.dash3.notifications.restartNotifService
+import com.rishi.dash3.notifications.sendNotif
+import com.rishi.dash3.notifications.stopNotifService
 //import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
@@ -115,6 +117,17 @@ class Settings : Fragment() {
         }
 
         // TODO: Add notificatins setting here
+        view.findViewById<CheckBox>(R.id.notifCheck).isChecked = sendNotif
+        view.findViewById<CheckBox>(R.id.notifCheck).setOnCheckedChangeListener { compoundButton, b ->
+            if(b){
+                sendNotif = true
+                restartNotifService(context!!)
+            }
+            else{
+                sendNotif = false
+                stopNotifService(context!!)
+            }
+        }
 
         /*view.findViewById<Button>(R.id.exportData).setOnClickListener {
             try {

@@ -18,11 +18,12 @@ fun enqueueWork(context: Context, intent: Intent) {
     JobIntentService.enqueueWork(context, NotifService::class.java, JOB_ID, intent)
 }
 
+var sendNotif = true
 val ClsNotifChannelId = "1"
 val ClsNotifGrpId = "Class Alerts!"
 
 // In minutes
-val alertBefore = 1
+val alertBefore = 10
 
 @SuppressLint("ObsoleteSdkInt")
 fun restartNotifService(context: Context){
@@ -48,5 +49,5 @@ fun stopNotifService(context: Context){
     val pendingIntent = PendingIntent.getBroadcast(context, 0, alarmIntent, PendingIntent.FLAG_CANCEL_CURRENT)
 
     alarmManager.cancel(pendingIntent);
-    Toast.makeText(context.applicationContext, "Alarm Cancelled", Toast.LENGTH_LONG).show();
+    Toast.makeText(context.applicationContext, "Notifications Cancelled", Toast.LENGTH_LONG).show();
 }

@@ -1,16 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout android:layout_height="match_parent"
-    android:layout_width="match_parent"
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clipToPadding="true"
+    android:fillViewport="true"
+    android:fitsSystemWindows="true"
+    >
+<RelativeLayout android:layout_height="wrap_content"
+    android:layout_width="match_parent"
     android:padding="20dp"
     >
+
+    <CheckBox
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Send notifications 10 minutes before a class"
+        android:id="@+id/notifCheck"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        android:checked="true"
+        />
 
     <androidx.cardview.widget.CardView android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:id="@+id/semCard"
         app:cardCornerRadius="10dp"
+        android:layout_below="@id/notifCheck"
         >
 
         <RelativeLayout
@@ -144,4 +162,13 @@
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/importData"
         />-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:textSize="100sp"
+        android:layout_below="@id/reset"
+        android:id="@+id/dummy"
+        />
 </RelativeLayout>
+</ScrollView>

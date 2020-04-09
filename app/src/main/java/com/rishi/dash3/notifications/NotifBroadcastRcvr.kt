@@ -14,6 +14,9 @@ class NotifBroadcastRcvr : BroadcastReceiver() {
             Toast.LENGTH_SHORT
         ).show()*/
         Log.i("Broadcast", "Fired1 with id ${intent.getLongExtra("ClassId", -1)}")
+        if(intent.action == Intent.ACTION_BOOT_COMPLETED){
+            intent.putExtra("ClassId", (-1).toLong())
+        }
 
         //val serviceIntent = Intent(context, NotifService::class.java)
         //context.startService(serviceIntent)
