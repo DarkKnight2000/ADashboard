@@ -20,7 +20,6 @@
         android:id="@+id/notifCheck"
         android:padding="10dp"
         android:layout_marginTop="5dp"
-        android:checked="true"
         />
 
     <androidx.cardview.widget.CardView android:layout_width="match_parent"

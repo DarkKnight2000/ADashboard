@@ -11,4 +11,5 @@ open class Settings:RealmObject(){
     public var seg1End = "Select Date"
     public var seg2End = "Select Date"
     public var seg3End = "Select Date"
+    var sendNotif = false
 }

@@ -18,7 +18,6 @@ fun enqueueWork(context: Context, intent: Intent) {
     JobIntentService.enqueueWork(context, NotifService::class.java, JOB_ID, intent)
 }
 
-var sendNotif = true
 val ClsNotifChannelId = "1"
 val ClsNotifGrpId = "Class Alerts!"
 

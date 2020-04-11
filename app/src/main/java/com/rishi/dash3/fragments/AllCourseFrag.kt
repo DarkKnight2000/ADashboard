@@ -45,8 +45,8 @@ class AllCourseFrag : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        var allCrs = realm.where(EachCourse::class.java).findAll()
-        var adapter = ClassesAdapter(this.context!!, allCrs, realm)
+        val allCrs = realm.where(EachCourse::class.java).findAll()
+        val adapter = ClassesAdapter(this.context!!, allCrs, realm)
         view?.findViewById<RecyclerView>(R.id.recyclerView)?.adapter = adapter
     }
 

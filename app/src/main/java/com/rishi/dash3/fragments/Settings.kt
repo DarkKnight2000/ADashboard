@@ -1,30 +1,25 @@
 package com.rishi.dash3.fragments
 
 
+//import com.rishi.dash3.services.NotifService
 import android.Manifest
-import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.util.Calendar
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.os.storage.StorageManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.MimeTypeMap
-import android.widget.*
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.rishi.dash3.BuildConfig
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.Models.Settings
@@ -32,33 +27,24 @@ import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
 import com.rishi.dash3.notifications.restartNotifService
-import com.rishi.dash3.notifications.sendNotif
 import com.rishi.dash3.notifications.stopNotifService
-//import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-
 
 class Settings : Fragment() {
 
     lateinit var realm: Realm
-    private val fileName = "SampleFile.txt"
-    private val filepath = "Timetable App"
-    private lateinit var myExternalFile:File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         realm = Realm.getDefaultInstance()
         if(realm.where(Settings::class.java).findFirst() == null) {
             realm.beginTransaction()
-            val set = realm.createObject(Settings::class.java)
-            set.semStart = "04/12/2019"
-            set.seg2End = "18/12/2019"
-            set.seg3End = "25/12/2019"
-            set.seg1End = "11/12/2019"
+            val sett = realm.createObject(Settings::class.java)
+            sett.semStart = "04/12/2019"
+            sett.seg2End = "18/12/2019"
+            sett.seg3End = "25/12/2019"
+            sett.seg1End = "11/12/2019"
             realm.commitTransaction()
         }
         //context?.startService(Intent(context, NotifService::class.java))
@@ -81,18 +67,19 @@ class Settings : Fragment() {
                 Toast.makeText(this.context!!, "Segment dates are not in chronological order", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-            val set = realm.where(Settings::class.java).findFirst()!!
+            val sett = realm.where(Settings::class.java).findFirst()!!
             realm.beginTransaction()
-            set.semStart = semStart.text.toString()
-            set.seg1End = seg1.text.toString()
-            set.seg2End = seg2.text.toString()
-            set.seg3End = seg3.text.toString()
+            sett.semStart = semStart.text.toString()
+            sett.seg1End = seg1.text.toString()
+            sett.seg2End = seg2.text.toString()
+            sett.seg3End = seg3.text.toString()
             val a = realm.where(EachClass::class.java).notEqualTo("date", "").findAll()
             for(c in a){
-                c.day = c.day.substring(0,4) + getSeg(c.date, set.semStart, set.seg1End, set.seg2End, set.seg3End)
+                c.day = c.day.substring(0,4) + getSeg(c.date, sett.semStart, sett.seg1End, sett.seg2End, sett.seg3End)
             }
             realm.commitTransaction()
             Toast.makeText(context!!, "Updated", Toast.LENGTH_SHORT).show()
+            restartNotifService(this.context!!)
         }
 
         view.findViewById<Button>(R.id.reset).setOnClickListener{
@@ -116,15 +103,30 @@ class Settings : Fragment() {
             alertDialog.show()
         }
 
-        // TODO: Add notificatins setting here
-        view.findViewById<CheckBox>(R.id.notifCheck).isChecked = sendNotif
-        view.findViewById<CheckBox>(R.id.notifCheck).setOnCheckedChangeListener { compoundButton, b ->
+        view.findViewById<CheckBox>(R.id.notifCheck).setOnCheckedChangeListener { _, b ->
             if(b){
-                sendNotif = true
                 restartNotifService(context!!)
+                // Requesting permission in lower android versions
+                val permissionCheck = ContextCompat.checkSelfPermission(this.context!!, Manifest.permission.WAKE_LOCK)
+
+                if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                    val permsRequestCode = 200
+
+                    ActivityCompat.requestPermissions(
+                        this.activity!!,
+                        arrayOf(Manifest.permission.WAKE_LOCK), permsRequestCode)
+                } else {
+                    val sett = realm.where(Settings::class.java).findFirst()!!
+                    realm.beginTransaction()
+                    sett.sendNotif = true
+                    realm.commitTransaction()
+                }
             }
             else{
-                sendNotif = false
+                val sett = realm.where(Settings::class.java).findFirst()!!
+                realm.beginTransaction()
+                sett.sendNotif = false
+                realm.commitTransaction()
                 stopNotifService(context!!)
             }
         }
@@ -160,11 +162,12 @@ class Settings : Fragment() {
         */
          */
 
-        val set = realm.where(Settings::class.java).findFirst()!!
-        view.findViewById<TextView>(R.id.semStart).text = set.semStart
-        view.findViewById<TextView>(R.id.seg1).text = set.seg1End
-        view.findViewById<TextView>(R.id.seg2).text = set.seg2End
-        view.findViewById<TextView>(R.id.seg3).text = set.seg3End
+        val sett = realm.where(Settings::class.java).findFirst()!!
+        view.findViewById<TextView>(R.id.semStart).text = sett.semStart
+        view.findViewById<TextView>(R.id.seg1).text = sett.seg1End
+        view.findViewById<TextView>(R.id.seg2).text = sett.seg2End
+        view.findViewById<TextView>(R.id.seg3).text = sett.seg3End
+        view.findViewById<CheckBox>(R.id.notifCheck).isChecked = sett.sendNotif
         return view
     }
 
@@ -186,6 +189,19 @@ class Settings : Fragment() {
                 )
             ).show()
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int,
+                                            permissions: Array<String>, grantResults: IntArray) {
+
+            when (requestCode) {
+                200 -> {
+                    val sett = realm.where(Settings::class.java).findFirst()!!
+                    realm.beginTransaction()
+                    sett.sendNotif = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    realm.commitTransaction()
+                }
+            }
     }
 
     /*private fun isExternalStorageReadOnly():Boolean {
@@ -212,30 +228,21 @@ class Settings : Fragment() {
         return false
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
-                                            permissions: Array<String>, grantResults: IntArray) {
-        when (requestCode) {
-            2 -> {
-                // If request is cancelled, the result arrays are empty.
-                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-                    view?.findViewById<Button>(R.id.exportData)?.performClick()
-                } else {
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                    Toast.makeText(context, "Permission needed to share files!", Toast.LENGTH_SHORT).show()
-                }
-                return
-            }
 
-            // Add other 'when' lines to check for other
-            // permissions this app might request.
-            else -> {
-                // Ignore all other requests.
+
+        private fun onRequestPermissionsResult(
+        permsRequestCode: Int,
+        permissions: Array<String?>?,
+        grantResults: IntArray
+    ) {
+        when (permsRequestCode) {
+            200 -> {
+                sendNotif = grantResults[0] == PackageManager.PERMISSION_GRANTED
+
             }
         }
-    }*/
+    }
+    */
 
     override fun onDestroy() {
         super.onDestroy()

@@ -1,37 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.rishi.dash3">
-
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />-->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
-        android:allowBackup="true"
         android:name=".DashEntry"
+        android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/DarkTheme"
-        >
+        android:theme="@style/DarkTheme">
+        <activity android:name=".activties.AppIntroActivity"/>
         <activity
             android:name=".activties.MainActivity"
-            android:label="@string/app_name"
-            >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activties.CourseInfo"
-            />
-        <activity android:name=".activties.AddCourse"
-            />
+        <activity android:name=".activties.CourseInfo" />
+        <activity android:name=".activties.AddCourse" />
 
-
-        <receiver
-            android:name=".notifications.NotifBroadcastRcvr">
+        <receiver android:name=".notifications.NotifBroadcastRcvr">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
@@ -40,8 +33,7 @@
 
         <service
             android:name=".notifications.NotifService"
-            android:permission="android.permission.BIND_JOB_SERVICE">
-        </service>
-    </application>
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
 
+    </application>
 </manifest>
