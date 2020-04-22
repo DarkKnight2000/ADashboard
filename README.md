@@ -10,11 +10,11 @@ This app consists of 3 sections:
 
 2. Courses : Shows the list of all courses. You can add/delete your courses here
 
-> The list of classes can be edited at any time. All changes will be automatically reflected in the calendar.
+* The list of classes can be edited at any time. All changes will be automatically reflected in the calendar.
 
 3. Settings : Set the semester and segment dates to get the classes correctly. It also has a "reset" button to delete all courses and start fresh.
 
-> A semester is divided into 6 segments. A course can go from any segment to any other. Classes can be added into any one of the segments.
+> A semester is divided into 3 parts. A course can go from any segment to any other. Classes can be added into any one of the segments.
 
 > A class turns up in calendar only if the selected date is between that class's segment dates
 
@@ -24,4 +24,4 @@ All contributions are welcome. Having an issue? Feel free to [open an issue](htt
 
 # Contact
 
-Feel free to send your views/comments to nightwing9102@protonmail.com
+Feel free to send your views/comments to rishikaley@gmail.com
