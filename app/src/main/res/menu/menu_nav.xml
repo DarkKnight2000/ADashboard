@@ -13,7 +13,7 @@
 
     <item
         android:id="@+id/navigation_set"
-        android:icon="@drawable/baseline_settings_applications_white_24"
+        android:icon="@drawable/baseline_settings_applications_white_18"
         android:title="Settings" />
 
 </menu>

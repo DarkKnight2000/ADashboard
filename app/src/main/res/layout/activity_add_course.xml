@@ -51,10 +51,11 @@
             android:layout_below="@id/textView4"
             android:inputType="textCapCharacters"
             android:paddingHorizontal="10dp"
+            android:tooltipText="A unique identifier for the course"
             />
 
         <TextView
-            android:text="Default Slot"
+            android:text="Slot"
             android:layout_width="257dp"
             android:layout_height="wrap_content"
             android:id="@+id/textView5"
@@ -62,6 +63,7 @@
             android:textStyle="bold"
             android:layout_marginLeft="200dp"
             android:layout_alignTop="@id/textView4"
+            android:tooltipText="This is just for adding some initial classes, it can be changed later!"
 
 
             />
@@ -95,7 +97,7 @@
             />
 
         <TextView
-            android:text="Default Segments"
+            android:text="Segments"
             android:layout_width="257dp"
             android:layout_height="wrap_content"
             android:id="@+id/textView6"
@@ -113,7 +115,7 @@
             android:layout_alignStart="@id/textView6"
             />
         <TextView
-            android:text="This will add the following default classes :"
+            android:text="This will add the following classes(you can change them later) :"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/curClsLabel"

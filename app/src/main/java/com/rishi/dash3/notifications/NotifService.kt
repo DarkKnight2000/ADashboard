@@ -52,7 +52,7 @@ class NotifService : JobIntentService() {
                 val builder = NotificationCompat.Builder(this, ClsNotifChannelId)
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Class Alert!")
-                    .setContentText("You have a ${crseName} class at ${intToTime(cls.startTime)} in room ${cls.room}")
+                    .setContentText("You have a $crseName class at ${intToTime(cls.startTime)} in room ${cls.room}")
                     .setGroup(ClsNotifGrpId)
                     .setGroupSummary(true)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)

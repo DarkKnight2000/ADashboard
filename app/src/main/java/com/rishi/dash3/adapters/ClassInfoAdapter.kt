@@ -74,7 +74,7 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
                         Toast.makeText(context,"Cant delete class",Toast.LENGTH_SHORT).show()
                 }
                 //performing cancel action
-                builder.setNeutralButton("Cancel"){_ , _ ->
+                builder.setNegativeButton("Cancel"){_ , _ ->
                     //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
                 }
                 // Create the AlertDialog

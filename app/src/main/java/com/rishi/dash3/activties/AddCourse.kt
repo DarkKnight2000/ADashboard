@@ -92,7 +92,7 @@ class AddCourse : AppCompatActivity() {
                 return@setOnClickListener
             }
             else if(realm.where(EachCourse::class.java).equalTo("crsecode", code.text.toString()).findFirst() != null){
-                Toast.makeText(this, "A course with same code exists!! Try another code or edit that course", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "A course with same code exists!! Try another code or delete that course", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             var initID = getNextKey(realm)
@@ -168,7 +168,7 @@ class AddCourse : AppCompatActivity() {
             super.onBackPressed()
         }
         //performing cancel action
-        builder.setNeutralButton("Stay"){_ , _ ->
+        builder.setNegativeButton("Stay"){_ , _ ->
             //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
         }
         // Create the AlertDialog
