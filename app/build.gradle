@@ -29,6 +29,10 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 
+    aaptOptions {
+        cruncherEnabled = false
+    }
+
     // APK splitting
     splits {
         abi {
@@ -42,7 +46,7 @@ android {
             include 'x86', 'x86_64', 'armeabi-v7a', 'arm64-v8a'
 
             // Set this to false if you don't want an APK that has native code for all architectures
-            universalApk false
+            universalApk true
         }
     }
 

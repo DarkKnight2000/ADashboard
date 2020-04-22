@@ -270,7 +270,7 @@ class CourseInfo: AppCompatActivity(){
             super.onBackPressed()
         }
         //performing cancel action
-        builder.setNeutralButton("Stay"){_ , _ ->
+        builder.setNegativeButton("Stay"){_ , _ ->
             //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
         }
         // Create the AlertDialog

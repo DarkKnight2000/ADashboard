@@ -2,9 +2,8 @@ package com.rishi.dash3.activties
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.get
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rishi.dash3.R
@@ -27,17 +26,43 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
         setContentView(R.layout.activity_main)
         val tool = supportActionBar
 
-        val intent = Intent(this, AppIntroActivity::class.java)
-        this.startActivity(intent)
+        listener = BottomNavigationView.OnNavigationItemSelectedListener{
+            exit = false
+            val transaction = supportFragmentManager.beginTransaction()
+            when (it.itemId) {
+                R.id.navigation_cal -> {
+                    transaction.replace(R.id.frame_container, cal, tags[0])
+                    tool?.title = titles[0]
+                }
+                R.id.navigation_all -> {
+                    transaction.replace(R.id.frame_container, allC, tags[1])
+                    tool?.title = titles[1]
+                }
+                R.id.navigation_set -> {
+                    transaction.replace(R.id.frame_container, sets, tags[2])
+                    tool?.title = titles[2]
+                }
+                else -> {
+                    transaction.commit()
+                }
+            }
+            transaction.addToBackStack(null)
+            transaction.commit()
+            true
+        }
+
+
+        botNav.setOnNavigationItemSelectedListener(listener)
 
         val realm = Realm.getDefaultInstance()
         if(realm.where(com.rishi.dash3.Models.Settings::class.java).findFirst() == null) {
 
+
+            startActivity(Intent(this, AppIntroActivity::class.java))
 
             realm.beginTransaction()
             val set = realm.createObject(com.rishi.dash3.Models.Settings::class.java)
@@ -51,7 +76,20 @@ class MainActivity : AppCompatActivity() {
             transaction.commit()
             botNav.selectedItemId = R.id.navigation_set
             tool?.title = titles[2]
-            Toast.makeText(this, "Set semester dates to get started", Toast.LENGTH_LONG).show()
+
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Warning!!")
+            //set message for alert dialog
+            builder.setMessage("Set the timetable start and end dates to continue.")
+
+            //performing positive action
+            builder.setPositiveButton("Ok"){_, _ ->  }
+            //performing cancel action
+            // Create the AlertDialog
+            val alertDialog: AlertDialog = builder.create()
+            // Set other dialog properties
+            alertDialog.setCanceledOnTouchOutside(true)
+            alertDialog.show()
         }
         else{
             supportFragmentManager.beginTransaction().replace(R.id.frame_container, cal, tags[0]).commit()
@@ -60,32 +98,6 @@ class MainActivity : AppCompatActivity() {
 
 
         realm.close()
-
-        listener = BottomNavigationView.OnNavigationItemSelectedListener{
-            exit = false
-            val transaction = supportFragmentManager.beginTransaction()
-            if(it.itemId == R.id.navigation_cal) {
-                transaction.replace(R.id.frame_container, cal, tags[0])
-                tool?.title = titles[0]
-            }
-            else if(it.itemId == R.id.navigation_all) {
-                transaction.replace(R.id.frame_container, allC, tags[1])
-                tool?.title = titles[1]
-            }
-            else if(it.itemId == R.id.navigation_set) {
-                transaction.replace(R.id.frame_container, sets, tags[2])
-                tool?.title = titles[2]
-            }
-            else{
-                transaction.commit()
-            }
-            transaction.addToBackStack(null)
-            transaction.commit()
-            true
-        }
-
-
-        botNav.setOnNavigationItemSelectedListener(listener)
 
     }
 

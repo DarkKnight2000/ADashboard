@@ -45,6 +45,8 @@ class Settings : Fragment() {
             sett.seg2End = "18/12/2019"
             sett.seg3End = "25/12/2019"
             sett.seg1End = "11/12/2019"
+            val permissionCheck = ContextCompat.checkSelfPermission(this.context!!, Manifest.permission.WAKE_LOCK)
+            sett.sendNotif = permissionCheck == PackageManager.PERMISSION_GRANTED
             realm.commitTransaction()
         }
         //context?.startService(Intent(context, NotifService::class.java))
@@ -79,7 +81,7 @@ class Settings : Fragment() {
             }
             realm.commitTransaction()
             Toast.makeText(context!!, "Updated", Toast.LENGTH_SHORT).show()
-            restartNotifService(this.context!!)
+            if(sett.sendNotif) restartNotifService(this.context!!)
         }
 
         view.findViewById<Button>(R.id.reset).setOnClickListener{
@@ -96,6 +98,7 @@ class Settings : Fragment() {
                 realm.where(EachCourse::class.java).findAll().deleteAllFromRealm()
                 realm.commitTransaction()
                 Toast.makeText(this.context!!,"Reset successful!!",Toast.LENGTH_LONG).show()
+                    stopNotifService(this.context!!)
             }
             builder.setNegativeButton("Cancel"){_,_ -> return@setNegativeButton}
             val alertDialog: AlertDialog = builder.create()
@@ -107,7 +110,7 @@ class Settings : Fragment() {
             if(b){
                 restartNotifService(context!!)
                 // Requesting permission in lower android versions
-                val permissionCheck = ContextCompat.checkSelfPermission(this.context!!, Manifest.permission.WAKE_LOCK)
+                /*val permissionCheck = ContextCompat.checkSelfPermission(this.context!!, Manifest.permission.WAKE_LOCK)
 
                 if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
                     val permsRequestCode = 200
@@ -115,12 +118,12 @@ class Settings : Fragment() {
                     ActivityCompat.requestPermissions(
                         this.activity!!,
                         arrayOf(Manifest.permission.WAKE_LOCK), permsRequestCode)
-                } else {
+                } else {*/
                     val sett = realm.where(Settings::class.java).findFirst()!!
                     realm.beginTransaction()
                     sett.sendNotif = true
                     realm.commitTransaction()
-                }
+                //}
             }
             else{
                 val sett = realm.where(Settings::class.java).findFirst()!!
@@ -199,6 +202,8 @@ class Settings : Fragment() {
                     val sett = realm.where(Settings::class.java).findFirst()!!
                     realm.beginTransaction()
                     sett.sendNotif = grantResults[0] == PackageManager.PERMISSION_GRANTED
+                    if(sett.sendNotif) restartNotifService(this.context!!)
+                    else stopNotifService(this.context!!)
                     realm.commitTransaction()
                 }
             }
