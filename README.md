@@ -1,4 +1,4 @@
-# Dash
+# TimeTable app
 Keep track of your classes with this simple app
 
 You can find the latest apk file in the "releases" section.
@@ -14,9 +14,11 @@ This app consists of 3 sections:
 
 3. Settings : Set the semester and segment dates to get the classes correctly. It also has a "reset" button to delete all courses and start fresh.
 
-> A semester is divided into 3 parts. A course can go from any segment to any other. Classes can be added into any one of the segments.
+* A semester is divided into 3 parts. A course can go from any segment to any other. Classes can be added to a course at any time
 
-> A class turns up in calendar only if the selected date is between that class's segment dates
+* A class can be scheduled weekly or on a specific date
+
+* A class turns up in calendar only if the selected date is between that class's segment dates
 
 # Contribution and Feedback
 
