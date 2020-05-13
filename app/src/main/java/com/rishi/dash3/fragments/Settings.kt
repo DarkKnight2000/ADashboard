@@ -5,9 +5,11 @@ package com.rishi.dash3.fragments
 import android.Manifest
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.util.Calendar
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +19,8 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.rishi.dash3.Models.EachClass
 import com.rishi.dash3.Models.EachCourse
@@ -30,10 +32,16 @@ import com.rishi.dash3.notifications.restartNotifService
 import com.rishi.dash3.notifications.stopNotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 
 class Settings : Fragment() {
 
     lateinit var realm: Realm
+    private val fileName = "SampleFile.txt"
+    private val filepath = "MyFileStorage"
+    var myData = "123"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,7 +74,7 @@ class Settings : Fragment() {
         }
         view.findViewById<Button>(R.id.updateSem).setOnClickListener{
             if(isGreaterDate(seg1.text.toString(),seg2.text.toString()) || isGreaterDate(seg2.text.toString(),seg3.text.toString()) || isGreaterDate(semStart.text.toString(),seg1.text.toString())){
-                Toast.makeText(this.context!!, "Segment dates are not in chronological order", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this.context!!, "Dates are not in chronological order", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
             val sett = realm.where(Settings::class.java).findFirst()!!
@@ -134,36 +142,45 @@ class Settings : Fragment() {
             }
         }
 
-        /*view.findViewById<Button>(R.id.exportData).setOnClickListener {
+        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
+            view.findViewById<Button>(R.id.exportData).isEnabled = false
+            view.findViewById<Button>(R.id.importData).isEnabled = false
+        }
+
+        view.findViewById<Button>(R.id.exportData).setOnClickListener {
             try {
-                Toast.makeText(context, "${checkPer(context, this)}", Toast.LENGTH_SHORT).show()
-                if(isExternalStorageAvailable() && checkPer(context, this)){
-                    val fileOutPutStream = FileOutputStream(myExternalFile)
-                    fileOutPutStream.write("123".toByteArray())
-                    fileOutPutStream.close()
-                    Toast.makeText(context, "Saved! ${myExternalFile.absolutePath}", Toast.LENGTH_LONG).show()
-                    val sendIntent = Intent(Intent.ACTION_VIEW)
-                    sendIntent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    val uri = FileProvider.getUriForFile(context!!, context?.applicationContext?.packageName + ".provider", myExternalFile)
-                    sendIntent.setDataAndType(uri, /*MimeTypeMap.getSingleton().getMimeTypeFromExtension(MimeTypeMap.getFileExtensionFromUrl(fileName))*/"text/*")
-                    if(sendIntent.resolveActivity(activity!!.packageManager) != null)
-                    //val shareIntent = Intent.createChooser(sendIntent, "Sharing with")
-                    startActivity(sendIntent)
-                }
+
+                val myExternalFile = File(context!!.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), fileName)
+                Log.i("test0", "${context!!.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)}")
+                //if(!myExternalFile.exists()) myExternalFile.createNewFile()
+                val fos = FileOutputStream(myExternalFile)
+                fos.write(myData.toByteArray())
+                fos.close()
+
+                val install = Intent(Intent.ACTION_SEND)
+                //install.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
+                val apkURI = FileProvider.getUriForFile(
+                    context!!, context!!.applicationContext
+                        .packageName.toString() + ".fileprovider", myExternalFile
+                )
+                install.putExtra(Intent.EXTRA_STREAM, apkURI)
+                install.setType("text/*")
+                install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                //install.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(myExternalFile))
+                startActivity(Intent.createChooser(install, "Share data to.."))
+
             } catch (e: IOException) {
                 e.printStackTrace()
-                Toast.makeText(context, "Failed", Toast.LENGTH_SHORT).show()
             }
+            Toast.makeText(context!!, "SampleFile.txt saved to External Storage...", Toast.LENGTH_SHORT).show()
         }
 
         view.findViewById<Button>(R.id.importData).setOnClickListener {
 
+            val myExternalFile = File(activity?.getExternalFilesDir(filepath), fileName)
+            Log.i("test0", "${activity?.getExternalFilesDir(filepath)}")
+            //if(!myExternalFile.exists()) myExternalFile.createNewFile()
         }
-
-        myExternalFile = File(activity?.getExternalFilesDir(filepath), fileName)
-        //if(!myExternalFile.exists()) myExternalFile.createNewFile()
-        */
-         */
 
         val sett = realm.where(Settings::class.java).findFirst()!!
         view.findViewById<TextView>(R.id.semStart).text = sett.semStart
@@ -194,7 +211,7 @@ class Settings : Fragment() {
         }
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int,
+    /*override fun onRequestPermissionsResult(requestCode: Int,
                                             permissions: Array<String>, grantResults: IntArray) {
 
             when (requestCode) {
@@ -207,6 +224,16 @@ class Settings : Fragment() {
                     realm.commitTransaction()
                 }
             }
+    }*/
+
+    private fun isExternalStorageReadOnly(): Boolean {
+        val extStorageState: String = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED_READ_ONLY == extStorageState
+    }
+
+    private fun isExternalStorageAvailable(): Boolean {
+        val extStorageState: String = Environment.getExternalStorageState()
+        return Environment.MEDIA_MOUNTED == extStorageState
     }
 
     /*private fun isExternalStorageReadOnly():Boolean {
