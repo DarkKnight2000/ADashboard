@@ -1,15 +1,17 @@
 package com.rishi.dash3.fragments
 
 
-//import com.rishi.dash3.services.NotifService
 import android.Manifest
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.icu.util.Calendar
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.JsonReader
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,23 +27,19 @@ import androidx.fragment.app.Fragment
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
-import com.rishi.dash3.models.EachClass
-import com.rishi.dash3.models.EachCourse
+import com.rishi.dash3.models.*
 import com.rishi.dash3.models.Settings
-import com.rishi.dash3.models.writeCourses
 import com.rishi.dash3.notifications.restartNotifService
 import com.rishi.dash3.notifications.stopNotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
-import java.io.File
-import java.io.FileOutputStream
-import java.io.IOException
-import java.io.ObjectOutputStream
+import java.io.*
 
 class Settings : Fragment() {
 
     lateinit var realm: Realm
     private val fileName = "MyTimetable.txt"
+    private var inputFileUri:Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,19 +92,17 @@ class Settings : Fragment() {
 
         view.findViewById<Button>(R.id.reset).setOnClickListener{
             val builder = AlertDialog.Builder(this.context!!)
-            //set title for alert dialog
             builder.setTitle("Warning!")
-            //set message for alert dialog
             builder.setMessage("This will delete all courses and their classes and cannot be undone!!")
 
-            //performing positive action
-                builder.setPositiveButton("DELETE EVERYTHING"){_, _ ->
+            builder.setPositiveButton("DELETE EVERYTHING"){_, _ ->
                 realm.beginTransaction()
                 realm.where(EachClass::class.java).findAll().deleteAllFromRealm()
                 realm.where(EachCourse::class.java).findAll().deleteAllFromRealm()
                 realm.commitTransaction()
                 Toast.makeText(this.context!!,"Reset successful!!",Toast.LENGTH_LONG).show()
-                    stopNotifService(this.context!!)
+                //stopNotifService(this.context!!)
+                view.findViewById<CheckBox>(R.id.notifCheck).isChecked = false
             }
             builder.setNegativeButton("Cancel"){_,_ -> return@setNegativeButton}
             val alertDialog: AlertDialog = builder.create()
@@ -176,6 +172,11 @@ class Settings : Fragment() {
 
         view.findViewById<Button>(R.id.importData).setOnClickListener {
 
+            val intent = Intent()
+                .setType("text/*")
+                .setAction(Intent.ACTION_GET_CONTENT)
+
+            startActivityForResult(Intent.createChooser(intent, "Select a file"), 123)
         }
 
         val sett = realm.where(Settings::class.java).findFirst()!!
@@ -232,45 +233,42 @@ class Settings : Fragment() {
         return Environment.MEDIA_MOUNTED == extStorageState
     }
 
-    /*private fun isExternalStorageReadOnly():Boolean {
-        val extStorageState = Environment.getExternalStorageState()
-        if (Environment.MEDIA_MOUNTED_READ_ONLY == (extStorageState)) {
-            return true
-        }
-        return false
-    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
+            inputFileUri = data!!.data //The uri with the location of the file
+            if(inputFileUri != null) {
+                val objInpStream = JsonReader(InputStreamReader(ObjectInputStream(activity!!.contentResolver.openInputStream(inputFileUri)), "UTF-8"))
+                val newSettings:Settings = readSettings(objInpStream)
+                val readCrses = readAllCourses(objInpStream)
+                Log.i("test0", readCrses.toString())
+                Toast.makeText(context!!, "Done importing data", Toast.LENGTH_SHORT).show()
 
-    private fun isExternalStorageAvailable():Boolean {
-        val extStorageState = Environment.getExternalStorageState()
-        if (Environment.MEDIA_MOUNTED == (extStorageState)) {
-            return true
-        }
-        return false
-    }
+                val builder = AlertDialog.Builder(this.context!!)
+                builder.setTitle("Warning!")
+                builder.setMessage("This will delete all current courses and import from input file!!")
 
-    private fun checkPer(context:Context?, t:Fragment):Boolean{
-        if(context != null && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) return true
-            ActivityCompat.requestPermissions(t.activity as Activity,
-            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-            2)
-        return false
-    }
+                builder.setPositiveButton("Continue"){_, _ ->
+                    realm.beginTransaction()
+                    realm.where(EachClass::class.java).findAll().deleteAllFromRealm()
+                    realm.where(EachCourse::class.java).findAll().deleteAllFromRealm()
+                    realm.where(Settings::class.java).findAll().deleteAllFromRealm()
+                    realm.copyToRealm(readCrses)
+                    realm.copyToRealm(newSettings)
+                    realm.commitTransaction()
+                    Toast.makeText(this.context!!,"Import successful!!",Toast.LENGTH_LONG).show()
+                    if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(this.context!!)
 
-
-
-        private fun onRequestPermissionsResult(
-        permsRequestCode: Int,
-        permissions: Array<String?>?,
-        grantResults: IntArray
-    ) {
-        when (permsRequestCode) {
-            200 -> {
-                sendNotif = grantResults[0] == PackageManager.PERMISSION_GRANTED
-
+                    val frag = activity!!.supportFragmentManager.findFragmentByTag("sets")!!
+                    activity!!.supportFragmentManager.beginTransaction().detach(frag).attach(frag).commit()
+                }
+                builder.setNegativeButton("Cancel"){_,_ -> return@setNegativeButton}
+                val alertDialog: AlertDialog = builder.create()
+                alertDialog.setCanceledOnTouchOutside(true)
+                alertDialog.show()
             }
         }
     }
-    */
 
     override fun onDestroy() {
         super.onDestroy()
