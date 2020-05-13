@@ -3,17 +3,17 @@ package com.rishi.dash3.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.rishi.dash3.R
 import com.rishi.dash3.activties.AddCourse
 import com.rishi.dash3.adapters.ClassesAdapter
-import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.R
+import com.rishi.dash3.models.EachCourse
 import io.realm.Realm
 
 class AllCourseFrag : Fragment() {

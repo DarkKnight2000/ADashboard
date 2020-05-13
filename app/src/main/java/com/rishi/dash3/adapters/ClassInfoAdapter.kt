@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.EachCourse
 import com.rishi.dash3.R
 import com.rishi.dash3.intToTime
+import com.rishi.dash3.models.EachClass
+import com.rishi.dash3.models.EachCourse
 import io.realm.Realm
 import kotlinx.android.synthetic.main.edit_info_card.view.*
 

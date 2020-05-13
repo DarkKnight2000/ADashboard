@@ -22,12 +22,13 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
+import com.rishi.dash3.models.EachClass
+import com.rishi.dash3.models.EachCourse
+import com.rishi.dash3.models.Settings
+import com.rishi.dash3.models.writeCourses
 import com.rishi.dash3.notifications.restartNotifService
 import com.rishi.dash3.notifications.stopNotifService
 import io.realm.Realm
@@ -35,13 +36,12 @@ import kotlinx.android.synthetic.main.fragment_settings.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.io.ObjectOutputStream
 
 class Settings : Fragment() {
 
     lateinit var realm: Realm
-    private val fileName = "SampleFile.txt"
-    private val filepath = "MyFileStorage"
-    var myData = "123"
+    private val fileName = "MyTimetable.txt"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -153,9 +153,8 @@ class Settings : Fragment() {
                 val myExternalFile = File(context!!.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), fileName)
                 Log.i("test0", "${context!!.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)}")
                 //if(!myExternalFile.exists()) myExternalFile.createNewFile()
-                val fos = FileOutputStream(myExternalFile)
-                fos.write(myData.toByteArray())
-                fos.close()
+                val fos = ObjectOutputStream(FileOutputStream(myExternalFile))
+                writeCourses(fos, realm)
 
                 val install = Intent(Intent.ACTION_SEND)
                 //install.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
@@ -170,16 +169,13 @@ class Settings : Fragment() {
                 startActivity(Intent.createChooser(install, "Share data to.."))
 
             } catch (e: IOException) {
+                Toast.makeText(context!!, "There was an error while sharing...", Toast.LENGTH_SHORT).show()
                 e.printStackTrace()
             }
-            Toast.makeText(context!!, "SampleFile.txt saved to External Storage...", Toast.LENGTH_SHORT).show()
         }
 
         view.findViewById<Button>(R.id.importData).setOnClickListener {
 
-            val myExternalFile = File(activity?.getExternalFilesDir(filepath), fileName)
-            Log.i("test0", "${activity?.getExternalFilesDir(filepath)}")
-            //if(!myExternalFile.exists()) myExternalFile.createNewFile()
         }
 
         val sett = realm.where(Settings::class.java).findFirst()!!

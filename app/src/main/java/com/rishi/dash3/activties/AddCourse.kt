@@ -11,9 +11,9 @@ import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.rishi.dash3.*
-import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.Models.Settings
+import com.rishi.dash3.models.EachClass
+import com.rishi.dash3.models.EachCourse
+import com.rishi.dash3.models.Settings
 import com.rishi.dash3.notifications.restartNotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*

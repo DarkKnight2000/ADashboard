@@ -1,7 +1,7 @@
 package com.rishi.dash3
 
-import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.Settings
+import com.rishi.dash3.models.EachClass
+import com.rishi.dash3.models.Settings
 import io.realm.Realm
 import java.text.SimpleDateFormat
 import java.util.*

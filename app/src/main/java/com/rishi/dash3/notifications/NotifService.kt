@@ -9,11 +9,14 @@ import androidx.core.app.JobIntentService
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
-import com.rishi.dash3.*
-import com.rishi.dash3.Models.EachClass
-import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.Models.Settings
+import com.rishi.dash3.R
 import com.rishi.dash3.activties.MainActivity
+import com.rishi.dash3.getSeg
+import com.rishi.dash3.intToTime
+import com.rishi.dash3.models.EachClass
+import com.rishi.dash3.models.EachCourse
+import com.rishi.dash3.models.Settings
+import com.rishi.dash3.weekDays
 import io.realm.Realm
 import java.util.*
 

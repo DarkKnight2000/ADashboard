@@ -1,10 +1,10 @@
-package com.rishi.dash3.Models
+package com.rishi.dash3.models
 
 
 import io.realm.RealmObject
 
 
-open class Settings:RealmObject(){
+open class Settings:RealmObject() {
 
     var id = 0
     public var semStart = "Select Date"

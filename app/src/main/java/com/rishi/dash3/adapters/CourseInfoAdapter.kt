@@ -1,5 +1,6 @@
 package com.rishi.dash3.adapters
 
+//import com.rishi.dash3.services.NotifService
 import android.content.Context
 import android.content.Intent
 import android.view.LayoutInflater
@@ -8,12 +9,11 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.rishi.dash3.activties.CourseInfo
-import com.rishi.dash3.Models.EachCourse
-import com.rishi.dash3.Models.Settings
 import com.rishi.dash3.R
+import com.rishi.dash3.activties.CourseInfo
+import com.rishi.dash3.models.EachCourse
+import com.rishi.dash3.models.Settings
 import com.rishi.dash3.notifications.restartNotifService
-//import com.rishi.dash3.services.NotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.course_list_card.view.*
 

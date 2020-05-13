@@ -1,6 +1,5 @@
-package com.rishi.dash3.Models
+package com.rishi.dash3.models
 
-import com.rishi.dash3.Models.EachClass
 import io.realm.RealmList
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey

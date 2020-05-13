@@ -59,13 +59,13 @@ class MainActivity : AppCompatActivity() {
         botNav.setOnNavigationItemSelectedListener(listener)
 
         val realm = Realm.getDefaultInstance()
-        if(realm.where(com.rishi.dash3.Models.Settings::class.java).findFirst() == null) {
+        if(realm.where(com.rishi.dash3.models.Settings::class.java).findFirst() == null) {
 
 
             startActivity(Intent(this, AppIntroActivity::class.java))
 
             realm.beginTransaction()
-            val set = realm.createObject(com.rishi.dash3.Models.Settings::class.java)
+            val set = realm.createObject(com.rishi.dash3.models.Settings::class.java)
             set.semStart = "04/12/2019"
             set.seg2End = "18/12/2019"
             set.seg3End = "25/12/2019"
