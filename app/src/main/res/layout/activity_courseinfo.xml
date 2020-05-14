@@ -76,7 +76,7 @@
         <androidx.cardview.widget.CardView android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/dayModeSelector"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:id="@+id/clsEditor"
             app:cardCornerRadius="10dp"
             android:foregroundGravity="center_horizontal"
@@ -125,6 +125,7 @@
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
                     android:paddingTop="15dp"
+                    android:layout_marginTop="10dp"
                     android:layout_below="@id/segSelector"
                     />
                 <Spinner
@@ -192,16 +193,21 @@
                     android:id="@+id/roomName"
                     android:hint="Room"
                     android:inputType="textCapSentences"
+                    android:paddingHorizontal="15dp"
+                    android:paddingVertical="10dp"
+                    android:layout_marginTop="10dp"
                     />
 
                 <Button
 
                     android:layout_height="wrap_content"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:text="Add Class"
                     android:id="@+id/btnAddCls"
                     android:layout_below="@id/roomName"
-
+                    android:layout_marginTop="20dp"
+                    android:paddingHorizontal="15dp"
+                    android:layout_centerHorizontal="true"
                     />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
@@ -213,7 +219,8 @@
             android:layout_below="@id/clsEditor"
             android:text="Update"
             android:id="@+id/btnCommit"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="10dp"
             />
         <RadioGroup
             android:layout_width="wrap_content"
@@ -221,8 +228,9 @@
             android:layout_below="@id/recyclerViewClasses"
             android:id="@+id/dayModeSelector"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="15dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="50dp"
+            android:orientation="horizontal"
+            >
 
             <RadioButton
                 android:id="@+id/dateMode"
@@ -230,14 +238,15 @@
                 android:layout_height="wrap_content"
                 android:text="Specific Date"
                 android:checked="true"
-                android:layout_marginHorizontal="15dp"/>
+                android:paddingHorizontal="20dp"
+                />
 
             <RadioButton
                 android:id="@+id/weekly"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text= "Weekly"
-                android:layout_marginHorizontal="15dp"
+                android:paddingHorizontal="20dp"
                 />
 
         </RadioGroup>

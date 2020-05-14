@@ -1,14 +1,14 @@
 package com.rishi.dash3
 
-import io.realm.Realm.setDefaultConfiguration
-import io.realm.RealmConfiguration
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
-import com.rishi.dash3.notifications.ClsNotifChannelId
+import com.rishi.dash3.utils.ClsNotifChannelId
 import io.realm.Realm
+import io.realm.Realm.setDefaultConfiguration
+import io.realm.RealmConfiguration
 
 
 class DashEntry : Application() {

@@ -1,9 +1,12 @@
-package com.rishi.dash3.models
+package com.rishi.dash3.utils
 
 import android.util.JsonReader
 import android.util.JsonToken
 import android.util.JsonWriter
 import android.util.Log
+import com.rishi.dash3.models.EachClass
+import com.rishi.dash3.models.EachCourse
+import com.rishi.dash3.models.Settings
 import io.realm.Realm
 import io.realm.RealmList
 import java.io.OutputStream
@@ -19,7 +22,7 @@ fun writeCourses(oos : OutputStream, realm:Realm){
 
     writer.name("Courses")
     writer.beginArray()
-    for(fcr:EachCourse in realm.where(EachCourse::class.java).findAll()){
+    for(fcr: EachCourse in realm.where(EachCourse::class.java).findAll()){
         writeEachCourse(writer, fcr)
     }
     writer.endArray()
@@ -51,7 +54,7 @@ fun writeEachCourse(writer: JsonWriter, eachCourse: EachCourse){
 
     writer.name("classes")
     writer.beginArray()
-    for(fcls:EachClass in eachCourse.crseClsses){
+    for(fcls: EachClass in eachCourse.crseClsses){
         writeEachClass(writer, fcls)
     }
     writer.endArray()
@@ -86,7 +89,7 @@ fun readAllCourses(reader: JsonReader):List<EachCourse>{
     return readCrses
 }
 
-fun readEachCourse(reader: JsonReader):EachCourse{
+fun readEachCourse(reader: JsonReader): EachCourse {
     val newCrse = EachCourse()
     reader.beginObject()
     while(reader.hasNext()){
@@ -118,7 +121,7 @@ fun readClassArray(reader: JsonReader):RealmList<EachClass>{
     return readClsses
 }
 
-fun readEachClass(reader: JsonReader):EachClass{
+fun readEachClass(reader: JsonReader): EachClass {
     val newCls = EachClass()
 
     reader.beginObject()
@@ -146,7 +149,7 @@ fun readEachClass(reader: JsonReader):EachClass{
     return newCls
 }
 
-fun readSettings(reader: JsonReader):Settings{
+fun readSettings(reader: JsonReader): Settings {
 
     val sets = Settings()
 

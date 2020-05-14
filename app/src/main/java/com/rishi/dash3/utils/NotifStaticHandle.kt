@@ -1,4 +1,4 @@
-package com.rishi.dash3.notifications
+package com.rishi.dash3.utils
 
 import android.annotation.SuppressLint
 import android.app.AlarmManager
@@ -8,6 +8,8 @@ import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.core.app.JobIntentService
+import com.rishi.dash3.notifications.NotifBroadcastRcvr
+import com.rishi.dash3.notifications.NotifService
 
 
 /**
@@ -15,7 +17,8 @@ import androidx.core.app.JobIntentService
  */
 private val JOB_ID = 2
 fun enqueueWork(context: Context, intent: Intent) {
-    JobIntentService.enqueueWork(context, NotifService::class.java, JOB_ID, intent)
+    JobIntentService.enqueueWork(context, NotifService::class.java,
+        JOB_ID, intent)
 }
 
 val ClsNotifChannelId = "1"

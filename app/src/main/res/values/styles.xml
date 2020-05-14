@@ -21,6 +21,11 @@
 
     <style name="DarkTheme" parent="Theme.AppCompat.DayNight">
         <item name="colorAccent">@color/blue1</item>
+        <item name="android:buttonStyle">@style/DarkThemeButton</item>
+    </style>
+
+    <style name="DarkThemeButton" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/button_background</item>
     </style>
 
     <!-- <style name="DarkTheme" parent="Theme.AppCompat.DayNight">

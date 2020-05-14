@@ -21,7 +21,7 @@ import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
-import com.rishi.dash3.notifications.restartNotifService
+import com.rishi.dash3.utils.restartNotifService
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.exceptions.RealmException
@@ -154,7 +154,9 @@ class CourseInfo: AppCompatActivity(){
                 realmObj.crseClsses.addAll(presCls)
                 realm.commitTransaction()
                 Toast.makeText(this,"Updated Classes :)",Toast.LENGTH_SHORT).show()
-                if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(this)
+                if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(
+                    this
+                )
                 //for(c in  presCls) Log.i("Got tags2 ", c.id.toString())
 
             }catch (e: RealmException){
@@ -187,7 +189,7 @@ class CourseInfo: AppCompatActivity(){
 
         daySpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-                Toast.makeText(this@CourseInfo, "Selected " + weekDays[position], Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CourseInfo, "Selected " + weekDays[position] +"day", Toast.LENGTH_SHORT).show()
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

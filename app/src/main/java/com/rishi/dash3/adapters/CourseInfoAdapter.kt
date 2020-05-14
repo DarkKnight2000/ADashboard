@@ -13,7 +13,7 @@ import com.rishi.dash3.R
 import com.rishi.dash3.activties.CourseInfo
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
-import com.rishi.dash3.notifications.restartNotifService
+import com.rishi.dash3.utils.restartNotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.course_list_card.view.*
 
@@ -75,7 +75,9 @@ class ClassesAdapter(val context: Context, val clsses:MutableList<EachCourse>, v
                         notifyItemRangeChanged(crsePos,clsses.size)
                         //context.startService(Intent(context, NotifService::class.java))
                         //Toast.makeText(context, "Deleted at, Size " + clsses.size, Toast.LENGTH_SHORT).show()
-                        if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(context)
+                        if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(
+                            context
+                        )
                     }
                     else
                         Toast.makeText(context,"Cant delete course", Toast.LENGTH_SHORT).show()

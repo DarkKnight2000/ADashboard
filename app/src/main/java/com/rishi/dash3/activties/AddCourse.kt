@@ -14,7 +14,7 @@ import com.rishi.dash3.*
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
-import com.rishi.dash3.notifications.restartNotifService
+import com.rishi.dash3.utils.restartNotifService
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*
 

@@ -33,7 +33,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="30dp"
+            android:paddingVertical="30dp"
+            android:paddingHorizontal="40dp"
             >
 
     <TextView
@@ -42,7 +43,7 @@
         android:text="Part1 Start"
         android:id="@+id/semStartLabel"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <TextView
@@ -52,8 +53,9 @@
         android:id="@+id/semStart"
         android:layout_alignTop="@id/semStartLabel"
         android:layout_alignStart="@id/seg2"
+        android:layout_alignParentEnd="true"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <TextView
@@ -63,7 +65,7 @@
         android:id="@+id/seg1Label"
         android:padding="10dp"
         android:layout_below="@id/semStartLabel"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <TextView
@@ -74,7 +76,7 @@
         android:layout_alignTop="@id/seg1Label"
         android:layout_alignStart="@id/seg2"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <TextView
@@ -84,7 +86,7 @@
         android:id="@+id/seg2Label"
         android:padding="10dp"
         android:layout_below="@id/seg1Label"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <TextView
@@ -93,9 +95,9 @@
         android:text="Select Date"
         android:id="@+id/seg2"
         android:layout_alignTop="@id/seg2Label"
-        android:layout_toEndOf="@id/seg2Label"
+        android:layout_alignParentEnd="true"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <TextView
@@ -105,7 +107,7 @@
         android:id="@+id/seg3Label"
         android:padding="10dp"
         android:layout_below="@id/seg2Label"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <TextView
@@ -116,16 +118,16 @@
         android:layout_alignTop="@id/seg3Label"
         android:layout_alignStart="@id/seg2"
         android:padding="10dp"
-        android:textSize="20sp"
+        android:textSize="@dimen/myTextSize"
         />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Update"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/seg3Label"
         android:layout_marginTop="25dp"
+        android:layout_centerHorizontal="true"
         android:id="@+id/updateSem"
         />
         </RelativeLayout>
@@ -149,8 +151,9 @@
         android:layout_below="@id/reset"
         android:id="@+id/importData"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginTop="35dp"
+        android:tooltipText="Import settings from a file"
         />
 
     <Button
@@ -161,6 +164,7 @@
         android:id="@+id/exportData"
         android:layout_alignParentEnd="true"
         android:layout_alignTop="@id/importData"
+        android:tooltipText="Export settings to a file and share it with anyone"
         />
 
     <TextView

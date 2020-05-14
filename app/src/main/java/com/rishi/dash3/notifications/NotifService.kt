@@ -16,6 +16,9 @@ import com.rishi.dash3.intToTime
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
+import com.rishi.dash3.utils.ClsNotifChannelId
+import com.rishi.dash3.utils.ClsNotifGrpId
+import com.rishi.dash3.utils.alertBefore
 import com.rishi.dash3.weekDays
 import io.realm.Realm
 import java.util.*
@@ -52,7 +55,9 @@ class NotifService : JobIntentService() {
                     getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT)
                 }
 
-                val builder = NotificationCompat.Builder(this, ClsNotifChannelId)
+                val builder = NotificationCompat.Builder(this,
+                    ClsNotifChannelId
+                )
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Class Alert!")
                     .setContentText("You have a $crseName class at ${intToTime(cls.startTime)} in room ${cls.room}")

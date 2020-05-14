@@ -27,10 +27,10 @@ import androidx.fragment.app.Fragment
 import com.rishi.dash3.R
 import com.rishi.dash3.getSeg
 import com.rishi.dash3.isGreaterDate
-import com.rishi.dash3.models.*
+import com.rishi.dash3.models.EachClass
+import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
-import com.rishi.dash3.notifications.restartNotifService
-import com.rishi.dash3.notifications.stopNotifService
+import com.rishi.dash3.utils.*
 import io.realm.Realm
 import kotlinx.android.synthetic.main.fragment_settings.*
 import java.io.*
@@ -39,7 +39,6 @@ class Settings : Fragment() {
 
     lateinit var realm: Realm
     private val fileName = "MyTimetable.txt"
-    private var inputFileUri:Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,13 +55,37 @@ class Settings : Fragment() {
             realm.commitTransaction()
         }
         //context?.startService(Intent(context, NotifService::class.java))
-
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
+        val inpUriStr = arguments?.getString("uri", "")
+        if(inpUriStr != null && inpUriStr != "") {
+            arguments?.putString("uri", null)
+            Log.i("test0", inpUriStr.toString())
+            try {
+                val inpUri = Uri.parse(inpUriStr)
+                Log.i("test0", inpUri.toString())
+                if (inpUri != null) {
+                    importFile(
+                        InputStreamReader(
+                            ObjectInputStream(
+                                activity!!.contentResolver.openInputStream(
+                                    inpUri
+                                )
+                            )
+                        )
+                    )
+                }
+            } catch (e: Exception) {
+
+            }
+        }
+
+
         val view = inflater.inflate(R.layout.fragment_settings, container, false)
         val ids = arrayOf(R.id.semStart, R.id.seg1, R.id.seg2, R.id.seg3)
         var s:TextView
@@ -147,7 +170,7 @@ class Settings : Fragment() {
             try {
 
                 val myExternalFile = File(context!!.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS), fileName)
-                Log.i("test0", "${context!!.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)}")
+                //Log.i("test0", "${context!!.getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)}")
                 //if(!myExternalFile.exists()) myExternalFile.createNewFile()
                 val fos = ObjectOutputStream(FileOutputStream(myExternalFile))
                 writeCourses(fos, realm)
@@ -159,7 +182,7 @@ class Settings : Fragment() {
                         .packageName.toString() + ".fileprovider", myExternalFile
                 )
                 install.putExtra(Intent.EXTRA_STREAM, apkURI)
-                install.setType("text/*")
+                install.setType("application/json")
                 install.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                 //install.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(myExternalFile))
                 startActivity(Intent.createChooser(install, "Share data to.."))
@@ -236,37 +259,59 @@ class Settings : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?){
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == 123 && resultCode == Activity.RESULT_OK) {
-            inputFileUri = data!!.data //The uri with the location of the file
-            if(inputFileUri != null) {
-                val objInpStream = JsonReader(InputStreamReader(ObjectInputStream(activity!!.contentResolver.openInputStream(inputFileUri)), "UTF-8"))
-                val newSettings:Settings = readSettings(objInpStream)
-                val readCrses = readAllCourses(objInpStream)
+            val inputFileUri = data!!.data //The uri with the location of the file
+            val a = ObjectInputStream(activity!!.contentResolver.openInputStream(inputFileUri))
+            val b = InputStreamReader(a, "UTF-8")
+            importFile(b)
+        }
+    }
+
+    fun importFile(b:InputStreamReader?){
+        val newSettings: Settings
+        val readCrses: List<EachCourse>
+        if(b != null) {
+            val objInpStream = JsonReader(b)
+            try {
+                newSettings = readSettings(objInpStream)
+                readCrses = readAllCourses(objInpStream)
                 Log.i("test0", readCrses.toString())
-                Toast.makeText(context!!, "Done importing data", Toast.LENGTH_SHORT).show()
-
-                val builder = AlertDialog.Builder(this.context!!)
-                builder.setTitle("Warning!")
-                builder.setMessage("This will delete all current courses and import from input file!!")
-
-                builder.setPositiveButton("Continue"){_, _ ->
-                    realm.beginTransaction()
-                    realm.where(EachClass::class.java).findAll().deleteAllFromRealm()
-                    realm.where(EachCourse::class.java).findAll().deleteAllFromRealm()
-                    realm.where(Settings::class.java).findAll().deleteAllFromRealm()
-                    realm.copyToRealm(readCrses)
-                    realm.copyToRealm(newSettings)
-                    realm.commitTransaction()
-                    Toast.makeText(this.context!!,"Import successful!!",Toast.LENGTH_LONG).show()
-                    if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(this.context!!)
-
-                    val frag = activity!!.supportFragmentManager.findFragmentByTag("sets")!!
-                    activity!!.supportFragmentManager.beginTransaction().detach(frag).attach(frag).commit()
-                }
-                builder.setNegativeButton("Cancel"){_,_ -> return@setNegativeButton}
-                val alertDialog: AlertDialog = builder.create()
-                alertDialog.setCanceledOnTouchOutside(true)
-                alertDialog.show()
+                Toast.makeText(context!!, "Done reading data", Toast.LENGTH_SHORT).show()
             }
+            catch(e:IOException){
+                Toast.makeText(context!!, "Invalid data file", Toast.LENGTH_LONG).show()
+                return
+            }
+
+            val builder = AlertDialog.Builder(this.context!!)
+            builder.setTitle("Warning!")
+            builder.setMessage("This will delete all current courses and import from input file!!")
+
+            builder.setPositiveButton("Continue"){_, _ ->
+                newSettings.sendNotif = realm.where(Settings::class.java).findFirst()!!.sendNotif
+                realm.beginTransaction()
+                realm.where(EachClass::class.java).findAll().deleteAllFromRealm()
+                realm.where(EachCourse::class.java).findAll().deleteAllFromRealm()
+                realm.where(Settings::class.java).findAll().deleteAllFromRealm()
+                realm.copyToRealm(readCrses)
+                realm.copyToRealm(newSettings)
+                realm.commitTransaction()
+                Toast.makeText(this.context!!,"Import successful!!",Toast.LENGTH_LONG).show()
+                if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(
+                    this.context!!
+                )
+
+                val frag = activity!!.supportFragmentManager.findFragmentByTag("sets")!!
+                activity!!.supportFragmentManager.beginTransaction()
+                    .detach(frag)
+                    .attach(frag)
+                    .commitAllowingStateLoss()
+                Log.i("test0", "notifs ${realm.where(Settings::class.java).findFirst()!!.sendNotif}")
+                if(newSettings.sendNotif) restartNotifService(context!!)
+            }
+            builder.setNegativeButton("Cancel"){_,_ -> return@setNegativeButton}
+            val alertDialog: AlertDialog = builder.create()
+            alertDialog.setCanceledOnTouchOutside(true)
+            alertDialog.show()
         }
     }
 

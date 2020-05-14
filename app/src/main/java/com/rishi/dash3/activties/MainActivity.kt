@@ -1,7 +1,9 @@
 package com.rishi.dash3.activties
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
@@ -59,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         botNav.setOnNavigationItemSelectedListener(listener)
 
         val realm = Realm.getDefaultInstance()
-        if(realm.where(com.rishi.dash3.models.Settings::class.java).findFirst() == null) {
+        if(Intent.ACTION_MAIN == intent.action && realm.where(com.rishi.dash3.models.Settings::class.java).findFirst() == null) {
 
 
             startActivity(Intent(this, AppIntroActivity::class.java))
@@ -91,11 +93,29 @@ class MainActivity : AppCompatActivity() {
             alertDialog.setCanceledOnTouchOutside(true)
             alertDialog.show()
         }
+        else if(Intent.ACTION_SEND == intent.action && intent.type != null){
+            if (intent.type!!.startsWith("text/")) {
+                Log.i("test0", intent.type + " " + intent.getParcelableExtra(Intent.EXTRA_STREAM))
+                val inpUri = intent.getParcelableExtra(Intent.EXTRA_STREAM) as Uri
+
+                val bundle = Bundle()
+                bundle.putString("uri", inpUri.toString())
+                sets.arguments = bundle
+
+
+                val transaction = supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.frame_container, sets, tags[2])
+                transaction.commit()
+                botNav.selectedItemId = R.id.navigation_set
+                tool?.title = titles[2]
+
+                Log.i("test0", "asdf")
+            }
+        }
         else{
             supportFragmentManager.beginTransaction().replace(R.id.frame_container, cal, tags[0]).commit()
             tool?.title = titles[0]
         }
-
 
         realm.close()
 
