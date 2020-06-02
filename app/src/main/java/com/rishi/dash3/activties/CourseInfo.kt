@@ -21,7 +21,7 @@ import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
-import com.rishi.dash3.utils.restartNotifService
+import com.rishi.dash3.utils.*
 import io.realm.Realm
 import io.realm.RealmQuery
 import io.realm.exceptions.RealmException
@@ -31,6 +31,7 @@ import kotlinx.android.synthetic.main.activity_courseinfo.*
 class CourseInfo: AppCompatActivity(){
 
     lateinit var realm:Realm
+    var edited = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,15 +63,15 @@ class CourseInfo: AppCompatActivity(){
 
         var realmObj: EachCourse = realm.where(EachCourse::class.java).equalTo("crsecode",textView3.text.toString()).findFirst()!!
         var presCls = (realm.copyFromRealm(realmObj.crseClsses))
-        Toast.makeText(this,"Set",Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this,"Set",Toast.LENGTH_SHORT).show()
 
-        val adapter = InfoAdapter(this, presCls, true, realm, realmObj)
+        val adapter = InfoAdapter(this, presCls, true, realm)
         recyclerViewClasses.adapter = adapter
 
 
         var initID = getNextKey(realm)
         btnAddCls.setOnClickListener {
-
+            edited = true
             if((!weekly.isChecked && !dateSelector.text.contains("/"))|| !startTime.text.contains(":") || !endTime.text.contains(":")){
                 Toast.makeText(this,"Invalid Details",Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -99,16 +100,18 @@ class CourseInfo: AppCompatActivity(){
                 val c1 = clshes.`in`("date", arrayOf("", tempC.date))
                 clshes = c1
             }
-            val clshes1 = clshes.between("startTime", tempC.startTime, tempC.endTime-1)
-            val clshes2 = clshes.between("endTime", tempC.startTime+1, tempC.endTime)
-
-            var clshCls = clshes1.findFirst()
-            if(clshCls == null){
-                clshCls = clshes2.findFirst()
+            var errorMsg = ""
+            for(tc:EachClass in clshes.findAll()) {
+                // TODO: Add a min space between classes
+                if ((tc.startTime < tempC.startTime && tc.endTime <= tempC.startTime) || (tc.startTime >= tempC.endTime && tc.endTime > tempC.endTime)) continue
+                errorMsg += "${tc.code} ${intToTime(tc.startTime)} - ${intToTime(tc.endTime)}\n"
             }
             clshPres = getClshes(presCls, tempC)
-            if(clshCls == null && clshPres.id == (-1).toLong()){
-                //Toast.makeText(this, "id "+tempC.id, Toast.LENGTH_SHORT).show()
+            // TODO: Checking only one clash here
+            if(clshPres.id != (-1).toLong()){
+                errorMsg += "${clshPres.code} ${intToTime(clshPres.startTime)} - ${intToTime(clshPres.endTime)}\n"
+            }
+            if(errorMsg.isEmpty()){
                 presCls.add(tempC)
                 val pos = presCls.indexOf(tempC)
                 if (pos != -1) {
@@ -118,13 +121,23 @@ class CourseInfo: AppCompatActivity(){
                 }
             }
             else{
-                initID--
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Oops!!")
-                val msg =  if(clshCls!=null)"Clashing with class of " + clshCls.code + " from ${intToTime(clshCls.startTime)} to ${intToTime(clshCls.endTime)}"
-                else "Clashing with class of " + clshPres.code + " from ${intToTime(clshPres.startTime)} to ${intToTime(clshPres.endTime)}"
-                builder.setMessage(msg)
-                builder.setPositiveButton("OK"){_,_ -> return@setPositiveButton}
+                errorMsg =  "Clashing with classes :\n$errorMsg"
+                builder.setMessage(errorMsg)
+                builder.setPositiveButton("Allow"){_,_ ->
+                    presCls.add(tempC)
+                    val pos = presCls.indexOf(tempC)
+                    //Toast.makeText(this, "id "+tempC.id, Toast.LENGTH_SHORT).show()
+                    if (pos != -1) {
+                        val dataSize = presCls.size
+                        adapter.notifyItemInserted(dataSize)
+                        adapter.notifyItemRangeChanged(dataSize, dataSize)
+                    }
+                }
+                builder.setNegativeButton("Cancel"){_,_ ->
+                    initID--
+                }
                 val alertDialog: AlertDialog = builder.create()
                 alertDialog.setCancelable(false)
                 alertDialog.setCanceledOnTouchOutside(true)
@@ -172,6 +185,7 @@ class CourseInfo: AppCompatActivity(){
 
 
         weekly.setOnCheckedChangeListener { _, isChecked ->
+            edited = true
             if(isChecked){
                 daySpinner.visibility = View.VISIBLE
                 segSelector.visibility = View.VISIBLE
@@ -206,6 +220,7 @@ class CourseInfo: AppCompatActivity(){
                 cal.set(Calendar.MINUTE,minute)
                 startTime.text = SimpleDateFormat("HH:mm").format(cal.time)
             }
+            edited = true
             TimePickerDialog(this,timeSetListener,cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),true).show()
         }
 
@@ -221,6 +236,7 @@ class CourseInfo: AppCompatActivity(){
                 else
                     Toast.makeText(this,"End time cant be ahead of Start time",Toast.LENGTH_SHORT).show()
             }
+            edited = true
             TimePickerDialog(this,timeSetListener,cal.get(Calendar.HOUR_OF_DAY),cal.get(Calendar.MINUTE),true).show()
         }
 
@@ -236,6 +252,7 @@ class CourseInfo: AppCompatActivity(){
                 dateSelector.text = mDate
                 dateSelectedDay = cal.get(Calendar.DAY_OF_WEEK)
             }
+            edited = true
             DatePickerDialog(this,dateSetListener,cal.get(Calendar.YEAR),cal.get(Calendar.MONTH),cal.get(Calendar.DAY_OF_MONTH)).show()
         }
 
@@ -261,25 +278,29 @@ class CourseInfo: AppCompatActivity(){
     }
 
     override fun onBackPressed() {
+        if(edited) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Warning!!")
+            //set message for alert dialog
+            builder.setMessage("Make sure you clicked the 'Update' button or else all your changes will be lost!")
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Warning!!")
-        //set message for alert dialog
-        builder.setMessage("Are you sure you want to go back? All your changes will be lost!")
-
-        //performing positive action
-        builder.setPositiveButton("Go back"){_, _ ->
+            //performing positive action
+            builder.setPositiveButton("Go back") { _, _ ->
+                super.onBackPressed()
+            }
+            //performing cancel action
+            builder.setNegativeButton("Stay") { _, _ ->
+                //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
+            }
+            // Create the AlertDialog
+            val alertDialog: AlertDialog = builder.create()
+            // Set other dialog properties
+            alertDialog.setCanceledOnTouchOutside(true)
+            alertDialog.show()
+        }
+        else{
             super.onBackPressed()
         }
-        //performing cancel action
-        builder.setNegativeButton("Stay"){_ , _ ->
-            //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
-        }
-        // Create the AlertDialog
-        val alertDialog: AlertDialog = builder.create()
-        // Set other dialog properties
-        alertDialog.setCanceledOnTouchOutside(true)
-        alertDialog.show()
     }
 
     override fun onDestroy() {

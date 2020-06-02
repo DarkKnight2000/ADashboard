@@ -80,6 +80,7 @@
             android:id="@+id/clsEditor"
             app:cardCornerRadius="10dp"
             android:foregroundGravity="center_horizontal"
+            android:layout_marginHorizontal="10dp"
             >
             <RelativeLayout
                 android:layout_width="match_parent"

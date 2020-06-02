@@ -1,4 +1,4 @@
-package com.rishi.dash3
+package com.rishi.dash3.utils
 
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.Settings
@@ -43,20 +43,38 @@ fun isGreaterDate(a:String, b:String):Boolean{
     return true
 }
 
-val part1_code = "1"
-val part2_code = "2"
-val part3_code = "3"
+const val part1_code = "1"
+const val part2_code = "2"
+const val part3_code = "3"
 
 fun getSeg(a:String, s1:String, s2:String, s3:String, s4:String):String{
-    return if(!isGreaterDate(a,s1)) ""
-    else if(!isGreaterDate(a,s2)) part1_code
-    else if(!isGreaterDate(a,s3)) part2_code
-    else if(!isGreaterDate(a,s4)) part3_code
+    return if(!isGreaterDate(a, s1)) ""
+    else if(!isGreaterDate(
+            a,
+            s2
+        )
+    ) part1_code
+    else if(!isGreaterDate(
+            a,
+            s3
+        )
+    ) part2_code
+    else if(!isGreaterDate(
+            a,
+            s4
+        )
+    ) part3_code
     else ""
 }
 
 fun getSeg(a:String, s:Settings):String{
-    return getSeg(a, s.semStart, s.seg1End, s.seg2End, s.seg3End)
+    return getSeg(
+        a,
+        s.semStart,
+        s.seg1End,
+        s.seg2End,
+        s.seg3End
+    )
 }
 
 

@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -29,12 +31,11 @@ class AllCourseFrag : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.activity_allcourses, container, false)
+        val view = inflater.inflate(R.layout.fragment_allcourses, container, false)
 
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         view.findViewById<RecyclerView>(R.id.recyclerView).layoutManager = layoutManager
-
 
         view.findViewById<Button>(R.id.crseAdd).setOnClickListener {
             val intent = Intent(this.context, AddCourse::class.java)
@@ -46,8 +47,15 @@ class AllCourseFrag : Fragment() {
     override fun onResume() {
         super.onResume()
         val allCrs = realm.where(EachCourse::class.java).findAll()
-        val adapter = ClassesAdapter(this.context!!, allCrs, realm)
-        view?.findViewById<RecyclerView>(R.id.recyclerView)?.adapter = adapter
+        view?.findViewById<RecyclerView>(R.id.recyclerView)?.adapter = ClassesAdapter(this.context!!, allCrs, realm)
+        if(allCrs.size > 0){
+            view!!.findViewById<TextView>(R.id.noCrseView).visibility = View.GONE
+            Toast.makeText(context,"Set gon", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            Toast.makeText(context,"Set vis", Toast.LENGTH_SHORT).show()
+            view!!.findViewById<TextView>(R.id.noCrseView).visibility = View.VISIBLE
+        }
     }
 
     override fun onDestroy() {

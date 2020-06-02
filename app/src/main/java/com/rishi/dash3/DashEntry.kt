@@ -3,6 +3,8 @@ package com.rishi.dash3
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import com.rishi.dash3.utils.ClsNotifChannelId
@@ -26,7 +28,7 @@ class DashEntry : Application() {
             val manager = getSystemService(NotificationManager::class.java)
             manager.createNotificationChannel(channel)
         }
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        AppCompatDelegate.setDefaultNightMode(getSharedPreferences(packageName + "_sharedprefs", Context.MODE_PRIVATE).getInt("ThemePref", AppCompatDelegate.MODE_NIGHT_YES))
 
     }
 }

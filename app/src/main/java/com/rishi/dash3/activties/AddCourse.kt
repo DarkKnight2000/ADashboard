@@ -14,7 +14,7 @@ import com.rishi.dash3.*
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
-import com.rishi.dash3.utils.restartNotifService
+import com.rishi.dash3.utils.*
 import io.realm.Realm
 import kotlinx.android.synthetic.main.activity_add_course.*
 
@@ -57,10 +57,20 @@ class AddCourse : AppCompatActivity() {
         classMap["Z"] = arrayListOf("Tue 19:00 20:30", "Fri 19:00 20:30")
         val segMap:HashMap<String, ArrayList<String>> = HashMap()
         segMap["1"] =  arrayListOf(part1_code)
-        segMap["1-2"] = arrayListOf(part1_code,part2_code)
-        segMap["1-3"] =  arrayListOf(part1_code,part2_code,part3_code)
+        segMap["1-2"] = arrayListOf(
+            part1_code,
+            part2_code
+        )
+        segMap["1-3"] =  arrayListOf(
+            part1_code,
+            part2_code,
+            part3_code
+        )
         segMap["2"] = arrayListOf(part2_code)
-        segMap["2-3"] = arrayListOf(part2_code,part3_code)
+        segMap["2-3"] = arrayListOf(
+            part2_code,
+            part3_code
+        )
         segMap["3"] = arrayListOf(part3_code)
         val preSlots = classMap.keys.toTypedArray()
         val preSegs = segMap.keys.toTypedArray()
@@ -113,7 +123,9 @@ class AddCourse : AppCompatActivity() {
                     if(t.id != (-1).toLong()){
                         val builder = AlertDialog.Builder(this)
                         builder.setTitle("Oops!!")
-                        val msg =  "Clashing with class of " + t.code + " from ${intToTime(t.startTime)} to ${intToTime(t.endTime)}"
+                        val msg =  "Clashing with class of " + t.code + " from ${intToTime(
+                            t.startTime
+                        )} to ${intToTime(t.endTime)}"
                         builder.setMessage(msg)
                         builder.setPositiveButton("OK"){_,_ -> return@setPositiveButton}
                         val alertDialog: AlertDialog = builder.create()

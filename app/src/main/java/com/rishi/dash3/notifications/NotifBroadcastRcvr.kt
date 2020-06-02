@@ -9,11 +9,7 @@ import com.rishi.dash3.utils.enqueueWork
 class NotifBroadcastRcvr : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        /*Toast.makeText(
-            context.applicationContext,
-            "Alarm Manager just ran1",
-            Toast.LENGTH_SHORT
-        ).show()*/
+
         Log.i("Broadcast", "Fired1 with id ${intent.getLongExtra("ClassId", -1)}")
         if(intent.action == Intent.ACTION_BOOT_COMPLETED){
             intent.putExtra("ClassId", (-1).toLong())

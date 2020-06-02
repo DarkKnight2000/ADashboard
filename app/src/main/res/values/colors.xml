@@ -11,5 +11,6 @@
     <color name="grey3">#333333</color>
     <color name="grey4">#444444</color>
     <color name="grey5">#555555</color>
+    <color name="grey8">#888</color>
     <color name="greyE">#eeeeee</color>
 </resources>

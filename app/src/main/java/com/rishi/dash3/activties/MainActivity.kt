@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.get
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.rishi.dash3.R
@@ -24,37 +25,16 @@ class MainActivity : AppCompatActivity() {
     private val tags = arrayOf("cal", "allC", "sets")
     private val titles = arrayOf("Calendar", "Courses", "Settings")
     private lateinit var listener: BottomNavigationView.OnNavigationItemSelectedListener
-    private var exit = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_main)
-        val tool = supportActionBar
+
+        Log.i("test0", "${AppCompatDelegate.getDefaultNightMode()} ${AppCompatDelegate.MODE_NIGHT_NO} ${AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM}")
+
 
         listener = BottomNavigationView.OnNavigationItemSelectedListener{
-            exit = false
-            val transaction = supportFragmentManager.beginTransaction()
-            when (it.itemId) {
-                R.id.navigation_cal -> {
-                    transaction.replace(R.id.frame_container, cal, tags[0])
-                    tool?.title = titles[0]
-                }
-                R.id.navigation_all -> {
-                    transaction.replace(R.id.frame_container, allC, tags[1])
-                    tool?.title = titles[1]
-                }
-                R.id.navigation_set -> {
-                    transaction.replace(R.id.frame_container, sets, tags[2])
-                    tool?.title = titles[2]
-                }
-                else -> {
-                    transaction.commit()
-                }
-            }
-            transaction.addToBackStack(null)
-            transaction.commit()
-            true
+            navToFrag(it.itemId)
         }
 
 
@@ -63,6 +43,7 @@ class MainActivity : AppCompatActivity() {
         val realm = Realm.getDefaultInstance()
         if(Intent.ACTION_MAIN == intent.action && realm.where(com.rishi.dash3.models.Settings::class.java).findFirst() == null) {
 
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
 
             startActivity(Intent(this, AppIntroActivity::class.java))
 
@@ -73,11 +54,7 @@ class MainActivity : AppCompatActivity() {
             set.seg3End = "25/12/2019"
             set.seg1End = "11/12/2019"
             realm.commitTransaction()
-            val transaction = supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_container, sets, tags[2])
-            transaction.commit()
-            botNav.selectedItemId = R.id.navigation_set
-            tool?.title = titles[2]
+            navToFrag(R.id.navigation_set)
 
             val builder = AlertDialog.Builder(this)
             builder.setTitle("Warning!!")
@@ -95,7 +72,7 @@ class MainActivity : AppCompatActivity() {
         }
         else if(Intent.ACTION_SEND == intent.action && intent.type != null){
             if (intent.type!!.startsWith("text/")) {
-                Log.i("test0", intent.type + " " + intent.getParcelableExtra(Intent.EXTRA_STREAM))
+                //Log.i("test0", intent.type + " " + intent.getParcelableExtra(Intent.EXTRA_STREAM))
                 val inpUri = intent.getParcelableExtra(Intent.EXTRA_STREAM) as Uri
 
                 val bundle = Bundle()
@@ -103,18 +80,13 @@ class MainActivity : AppCompatActivity() {
                 sets.arguments = bundle
 
 
-                val transaction = supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.frame_container, sets, tags[2])
-                transaction.commit()
-                botNav.selectedItemId = R.id.navigation_set
-                tool?.title = titles[2]
+                navToFrag(R.id.navigation_set)
 
                 Log.i("test0", "asdf")
             }
         }
         else{
-            supportFragmentManager.beginTransaction().replace(R.id.frame_container, cal, tags[0]).commit()
-            tool?.title = titles[0]
+            navToFrag(R.id.navigation_cal)
         }
 
         realm.close()
@@ -146,5 +118,30 @@ class MainActivity : AppCompatActivity() {
             exit = true
         }*/
 
+    }
+
+    fun navToFrag(itemId:Int):Boolean{
+        val tool = supportActionBar
+        val transaction = supportFragmentManager.beginTransaction()
+        when (itemId) {
+            R.id.navigation_cal -> {
+                transaction.replace(R.id.frame_container, cal, tags[0])
+                tool?.title = titles[0]
+            }
+            R.id.navigation_all -> {
+                transaction.replace(R.id.frame_container, allC, tags[1])
+                tool?.title = titles[1]
+            }
+            R.id.navigation_set -> {
+                transaction.replace(R.id.frame_container, sets, tags[2])
+                tool?.title = titles[2]
+            }
+            else -> {
+                transaction.commit()
+            }
+        }
+        transaction.addToBackStack(null)
+        transaction.commit()
+        return true
     }
 }

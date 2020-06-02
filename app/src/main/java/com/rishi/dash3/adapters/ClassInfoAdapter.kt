@@ -9,13 +9,18 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.rishi.dash3.R
-import com.rishi.dash3.intToTime
+import com.rishi.dash3.utils.intToTime
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import io.realm.Realm
 import kotlinx.android.synthetic.main.edit_info_card.view.*
 
-class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val canEdit:Boolean, val realm:Realm, var crse:EachCourse?) : RecyclerView.Adapter<InfoAdapter.EachViewHolder>(){
+class InfoAdapter(
+    val context: Context,
+    val clsses: MutableList<EachClass>,
+    val canEdit: Boolean,
+    val realm: Realm
+) : RecyclerView.Adapter<InfoAdapter.EachViewHolder>(){
 
 
 
@@ -45,7 +50,8 @@ class InfoAdapter(val context: Context, val clsses:MutableList<EachClass>, val c
                 else itemView.weekdayView.text = cls.day
             }
             else itemView.weekdayView.text = cls.code
-            itemView.startTime.text = intToTime(cls.startTime)
+            itemView.startTime.text =
+                intToTime(cls.startTime)
             itemView.endTime.text = intToTime(cls.endTime)
             itemView.room.text = cls.room
             itemView.btnBin.visibility = if (canEdit) View.VISIBLE else View.GONE

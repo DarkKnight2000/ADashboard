@@ -21,12 +21,14 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.rishi.dash3.R
-import com.rishi.dash3.getSeg
-import com.rishi.dash3.isGreaterDate
+import com.rishi.dash3.activties.MainActivity
+import com.rishi.dash3.utils.getSeg
+import com.rishi.dash3.utils.isGreaterDate
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
@@ -94,7 +96,17 @@ class Settings : Fragment() {
             s.setOnClickListener(dateSetter(this.context!!, s))
         }
         view.findViewById<Button>(R.id.updateSem).setOnClickListener{
-            if(isGreaterDate(seg1.text.toString(),seg2.text.toString()) || isGreaterDate(seg2.text.toString(),seg3.text.toString()) || isGreaterDate(semStart.text.toString(),seg1.text.toString())){
+            if(isGreaterDate(
+                    seg1.text.toString(),
+                    seg2.text.toString()
+                ) || isGreaterDate(
+                    seg2.text.toString(),
+                    seg3.text.toString()
+                ) || isGreaterDate(
+                    semStart.text.toString(),
+                    seg1.text.toString()
+                )
+            ){
                 Toast.makeText(this.context!!, "Dates are not in chronological order", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -106,7 +118,13 @@ class Settings : Fragment() {
             sett.seg3End = seg3.text.toString()
             val a = realm.where(EachClass::class.java).notEqualTo("date", "").findAll()
             for(c in a){
-                c.day = c.day.substring(0,4) + getSeg(c.date, sett.semStart, sett.seg1End, sett.seg2End, sett.seg3End)
+                c.day = c.day.substring(0,4) + getSeg(
+                    c.date,
+                    sett.semStart,
+                    sett.seg1End,
+                    sett.seg2End,
+                    sett.seg3End
+                )
             }
             realm.commitTransaction()
             Toast.makeText(context!!, "Updated", Toast.LENGTH_SHORT).show()
@@ -131,6 +149,28 @@ class Settings : Fragment() {
             val alertDialog: AlertDialog = builder.create()
             alertDialog.setCanceledOnTouchOutside(true)
             alertDialog.show()
+        }
+
+        view.findViewById<CheckBox>(R.id.themeChanger).isChecked = AppCompatDelegate.getDefaultNightMode() == AppCompatDelegate.MODE_NIGHT_YES
+
+        view.findViewById<CheckBox>(R.id.themeChanger).setOnCheckedChangeListener { _, isChecked ->
+            if(isChecked){
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                val sharedPref = activity?.getSharedPreferences(activity?.packageName + "_sharedprefs", Context.MODE_PRIVATE)
+                val editor = (sharedPref?.edit())
+                editor?.putInt("ThemePref", AppCompatDelegate.MODE_NIGHT_YES)
+                editor?.apply()
+            }
+            else{
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                val sharedPref = activity?.getSharedPreferences(activity?.packageName + "_sharedprefs", Context.MODE_PRIVATE)
+                val editor = (sharedPref?.edit())
+                editor?.putInt("ThemePref", AppCompatDelegate.MODE_NIGHT_NO)
+                editor?.apply()
+            }
+
+            activity!!.finish()
+            startActivity(Intent(activity, MainActivity::class.java))
         }
 
         view.findViewById<CheckBox>(R.id.notifCheck).setOnCheckedChangeListener { _, b ->
@@ -158,12 +198,8 @@ class Settings : Fragment() {
                 sett.sendNotif = false
                 realm.commitTransaction()
                 stopNotifService(context!!)
+                Toast.makeText(context!!, "Notifications turned off", Toast.LENGTH_SHORT).show()
             }
-        }
-
-        if (!isExternalStorageAvailable() || isExternalStorageReadOnly()) {
-            view.findViewById<Button>(R.id.exportData).isEnabled = false
-            view.findViewById<Button>(R.id.importData).isEnabled = false
         }
 
         view.findViewById<Button>(R.id.exportData).setOnClickListener {

@@ -11,15 +11,15 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.TaskStackBuilder
 import com.rishi.dash3.R
 import com.rishi.dash3.activties.MainActivity
-import com.rishi.dash3.getSeg
-import com.rishi.dash3.intToTime
+import com.rishi.dash3.utils.getSeg
+import com.rishi.dash3.utils.intToTime
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
 import com.rishi.dash3.utils.ClsNotifChannelId
 import com.rishi.dash3.utils.ClsNotifGrpId
 import com.rishi.dash3.utils.alertBefore
-import com.rishi.dash3.weekDays
+import com.rishi.dash3.utils.weekDays
 import io.realm.Realm
 import java.util.*
 
@@ -60,7 +60,9 @@ class NotifService : JobIntentService() {
                 )
                     .setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Class Alert!")
-                    .setContentText("You have a $crseName class at ${intToTime(cls.startTime)} in room ${cls.room}")
+                    .setContentText("You have a $crseName class at ${intToTime(
+                        cls.startTime
+                    )} in room ${cls.room}")
                     .setGroup(ClsNotifGrpId)
                     .setGroupSummary(true)
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -113,11 +115,21 @@ class NotifService : JobIntentService() {
         var mDay = cal.get(Calendar.DAY_OF_WEEK)
         var mDate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(
             android.icu.util.Calendar.YEAR)
-        var todaysClsQuery = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, ""))
+        var todaysClsQuery = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(
+            mDate,
+            settings.semStart,
+            settings.seg1End,
+            settings.seg2End,
+            settings.seg3End
+        )
+        ).`in`("date", arrayOf(mDate, ""))
             .greaterThan("startTime", cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) + alertBefore)
 
         var nextClsTime = todaysClsQuery.min("startTime")?.toInt()
-        while(nextClsTime == null && getSeg(mDate, settings) != ""){
+        while(nextClsTime == null && getSeg(
+                mDate,
+                settings
+            ) != ""){
             cal.set(Calendar.HOUR_OF_DAY, 0)
             cal.set(Calendar.MINUTE, 0)
             cal.set(Calendar.SECOND, 0)
@@ -125,13 +137,27 @@ class NotifService : JobIntentService() {
             mDay = cal.get(Calendar.DAY_OF_WEEK)
             mDate = "" + cal.get(Calendar.DAY_OF_MONTH) + "/" + (cal.get(Calendar.MONTH)+1) + "/" + cal.get(Calendar.YEAR)
             Log.i("Broadcast", "Checking for data $mDate")
-            todaysClsQuery = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, ""))
+            todaysClsQuery = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(
+                mDate,
+                settings.semStart,
+                settings.seg1End,
+                settings.seg2End,
+                settings.seg3End
+            )
+            ).`in`("date", arrayOf(mDate, ""))
                 .greaterThan("startTime", cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) + alertBefore)
 
             nextClsTime = todaysClsQuery.min("startTime")?.toInt()
         }
         if(nextClsTime != null){
-            val nextCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(mDate, settings.semStart, settings.seg1End, settings.seg2End, settings.seg3End)).`in`("date", arrayOf(mDate, ""))
+            val nextCls = realm.where(EachClass::class.java).equalTo("day", weekDays[mDay-1]  + " " + getSeg(
+                mDate,
+                settings.semStart,
+                settings.seg1End,
+                settings.seg2End,
+                settings.seg3End
+            )
+            ).`in`("date", arrayOf(mDate, ""))
                 .greaterThan("startTime", cal.get(Calendar.HOUR_OF_DAY)*60 + cal.get(Calendar.MINUTE) + alertBefore).equalTo("startTime", nextClsTime).findFirst()
             realm.close()
             return nextCls!!.id
