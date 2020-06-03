@@ -3,10 +3,7 @@ package com.rishi.dash3.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
+import android.view.*
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -32,15 +29,15 @@ class AllCourseFrag : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_allcourses, container, false)
-
+        setHasOptionsMenu(true)
         val layoutManager = LinearLayoutManager(activity)
         layoutManager.orientation = LinearLayoutManager.VERTICAL
         view.findViewById<RecyclerView>(R.id.recyclerView).layoutManager = layoutManager
 
-        view.findViewById<Button>(R.id.crseAdd).setOnClickListener {
+        /*view.findViewById<Button>(R.id.crseAdd).setOnClickListener {
             val intent = Intent(this.context, AddCourse::class.java)
             this.startActivity(intent)
-        }
+        }*/
         return view
     }
 
@@ -63,5 +60,19 @@ class AllCourseFrag : Fragment() {
         realm.close()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_add_course, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.menu_addCrse -> {
+                val intent = Intent(this.context, AddCourse::class.java)
+                this.startActivity(intent)
+                super.onOptionsItemSelected(item)
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
 }
