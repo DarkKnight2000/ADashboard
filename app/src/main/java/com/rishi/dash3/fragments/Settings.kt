@@ -27,8 +27,6 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.rishi.dash3.R
 import com.rishi.dash3.activties.MainActivity
-import com.rishi.dash3.utils.getSeg
-import com.rishi.dash3.utils.isGreaterDate
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
@@ -318,9 +316,9 @@ class Settings : Fragment() {
                 return
             }
 
-            val builder = AlertDialog.Builder(this.context!!)
+            val builder = AlertDialog.Builder(context!!)
             builder.setTitle("Warning!")
-            builder.setMessage("This will delete all current courses and import from input file!!")
+            builder.setMessage("Do you want to delete the current courses?")
 
             builder.setPositiveButton("Continue"){_, _ ->
                 newSettings.sendNotif = realm.where(Settings::class.java).findFirst()!!.sendNotif
@@ -331,10 +329,8 @@ class Settings : Fragment() {
                 realm.copyToRealm(readCrses)
                 realm.copyToRealm(newSettings)
                 realm.commitTransaction()
-                Toast.makeText(this.context!!,"Import successful!!",Toast.LENGTH_LONG).show()
-                if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(
-                    this.context!!
-                )
+                Toast.makeText(context!!,"Import successful!!",Toast.LENGTH_LONG).show()
+                if(realm.where(Settings::class.java).findFirst()!!.sendNotif) restartNotifService(context!!)
 
                 val frag = activity!!.supportFragmentManager.findFragmentByTag("sets")!!
                 activity!!.supportFragmentManager.beginTransaction()

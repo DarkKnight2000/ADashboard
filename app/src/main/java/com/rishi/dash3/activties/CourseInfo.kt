@@ -16,7 +16,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.rishi.dash3.*
+import com.rishi.dash3.R
 import com.rishi.dash3.adapters.InfoAdapter
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
@@ -87,7 +87,6 @@ class CourseInfo: AppCompatActivity(){
             tempC.room = roomName.text.toString()
             tempC.code = textView3.text.toString()
             var clshes:RealmQuery<EachClass>
-            var clshPres:EachClass
             if(weekly.isChecked){
                 tempC.day = daySpinner.selectedItem.toString() + " " + findViewById<RadioButton>(segSelector.checkedRadioButtonId).text
                 tempC.date = ""
@@ -100,17 +99,7 @@ class CourseInfo: AppCompatActivity(){
                 val c1 = clshes.`in`("date", arrayOf("", tempC.date))
                 clshes = c1
             }
-            var errorMsg = ""
-            for(tc:EachClass in clshes.findAll()) {
-                // TODO: Add a min space between classes
-                if ((tc.startTime < tempC.startTime && tc.endTime <= tempC.startTime) || (tc.startTime >= tempC.endTime && tc.endTime > tempC.endTime)) continue
-                errorMsg += "${tc.code} ${intToTime(tc.startTime)} - ${intToTime(tc.endTime)}\n"
-            }
-            clshPres = getClshes(presCls, tempC)
-            // TODO: Checking only one clash here
-            if(clshPres.id != (-1).toLong()){
-                errorMsg += "${clshPres.code} ${intToTime(clshPres.startTime)} - ${intToTime(clshPres.endTime)}\n"
-            }
+            val errorMsg = getClshes(presCls + clshes.findAll(), tempC)
             if(errorMsg.isEmpty()){
                 presCls.add(tempC)
                 val pos = presCls.indexOf(tempC)
@@ -123,7 +112,6 @@ class CourseInfo: AppCompatActivity(){
             else{
                 val builder = AlertDialog.Builder(this)
                 builder.setTitle("Oops!!")
-                errorMsg =  "Clashing with classes :\n$errorMsg"
                 builder.setMessage(errorMsg)
                 builder.setPositiveButton("Allow"){_,_ ->
                     presCls.add(tempC)

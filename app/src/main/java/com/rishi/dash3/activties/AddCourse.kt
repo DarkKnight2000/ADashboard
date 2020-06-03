@@ -10,7 +10,7 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import com.rishi.dash3.*
+import com.rishi.dash3.R
 import com.rishi.dash3.models.EachClass
 import com.rishi.dash3.models.EachCourse
 import com.rishi.dash3.models.Settings
@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.activity_add_course.*
 class AddCourse : AppCompatActivity() {
 
     lateinit var realm: Realm
+    var changed = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,8 +34,11 @@ class AddCourse : AppCompatActivity() {
         // Inflate the layout for this fragment
         //Log.i("Hey","view")
         val name = findViewById<EditText>(R.id.textView2)
+        name.setOnFocusChangeListener { _, hasFocus -> if(!hasFocus) changed = true }
         val code = findViewById<EditText>(R.id.textView3)
+        code.setOnFocusChangeListener { _, _ -> changed = true }
         val room = findViewById<EditText>(R.id.room)
+        room.setOnFocusChangeListener { _, _ -> changed = true }
         val slotSel = findViewById<Spinner>(R.id.slotSel)
         val segSel = findViewById<Spinner>(R.id.segSel)
         //val preCls= findViewById<TextView>(R.id.defClses)
@@ -106,9 +110,9 @@ class AddCourse : AppCompatActivity() {
                 return@setOnClickListener
             }
             var initID = getNextKey(realm)
-            var clsesCheck = arrayListOf<EachClass>()
+            val clsesCheck = arrayListOf<EachClass>()
             val clses = defClses.text.split("\n")
-            val prev = realm.where(EachClass::class.java).findAll()
+            val prev = realm.where(EachClass::class.java)
             for(s in segMap[segSel.selectedItem]!!.toTypedArray()) {
                 for (c in clses) {
                     val cls = EachClass()
@@ -119,23 +123,22 @@ class AddCourse : AppCompatActivity() {
                     cls.room = room.text.toString()
                     cls.day = c1[0] + " " + s
                     cls.code = code.text.toString()
-                    val t = getClshes(prev, cls)
-                    if(t.id != (-1).toLong()){
+                    val t = getClshes(prev.equalTo("day", cls.day).findAll(), cls)
+                    if(t.isNotEmpty()){
                         val builder = AlertDialog.Builder(this)
                         builder.setTitle("Oops!!")
-                        val msg =  "Clashing with class of " + t.code + " from ${intToTime(
-                            t.startTime
-                        )} to ${intToTime(t.endTime)}"
-                        builder.setMessage(msg)
-                        builder.setPositiveButton("OK"){_,_ -> return@setPositiveButton}
+                        builder.setMessage(t)
+                        builder.setPositiveButton("Ok"){_,_ -> }
                         val alertDialog: AlertDialog = builder.create()
                         alertDialog.setCancelable(false)
                         alertDialog.setCanceledOnTouchOutside(true)
                         alertDialog.show()
                         return@setOnClickListener
                     }
-                    cls.id = initID++
-                    clsesCheck.add(cls)
+                    else{
+                        cls.id = initID++
+                        clsesCheck.add(cls)
+                    }
                 }
             }
             realm.beginTransaction()
@@ -170,24 +173,29 @@ class AddCourse : AppCompatActivity() {
 
     override fun onBackPressed() {
 
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Warning!!")
-        //set message for alert dialog
-        builder.setMessage("Are you sure you want to go back? All your changes will be lost!")
+        if(changed) {
+            val builder = AlertDialog.Builder(this)
+            builder.setTitle("Warning!!")
+            //set message for alert dialog
+            builder.setMessage("Are you sure you want to go back? All your changes will be lost!")
 
-        //performing positive action
-        builder.setPositiveButton("Go back"){_, _ ->
+            //performing positive action
+            builder.setPositiveButton("Go back") { _, _ ->
+                super.onBackPressed()
+            }
+            //performing cancel action
+            builder.setNegativeButton("Stay") { _, _ ->
+                //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
+            }
+            // Create the AlertDialog
+            val alertDialog: AlertDialog = builder.create()
+            // Set other dialog properties
+            alertDialog.setCanceledOnTouchOutside(true)
+            alertDialog.show()
+        }
+        else{
             super.onBackPressed()
         }
-        //performing cancel action
-        builder.setNegativeButton("Stay"){_ , _ ->
-            //Toast.makeText(context,"Delete aborted",Toast.LENGTH_LONG).show()
-        }
-        // Create the AlertDialog
-        val alertDialog: AlertDialog = builder.create()
-        // Set other dialog properties
-        alertDialog.setCanceledOnTouchOutside(true)
-        alertDialog.show()
     }
 
     override fun onDestroy() {

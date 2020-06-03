@@ -92,12 +92,13 @@ fun getNextKey(realm: Realm): Long {
 }
 
 
-fun getClshes(a:List<EachClass>, b:EachClass):EachClass{
-    for(c:EachClass in a){
-        if(c.day == b.day && ((c.startTime <= b.startTime && b.startTime < c.endTime ) || (c.startTime < b.endTime && b.endTime <= c.endTime ))){
-            if(c.date == "") return c
-            else if(c.date == b.date) return c
-        }
+fun getClshes(a:List<EachClass>, b:EachClass):String{
+    var msg = ""
+    for(tc:EachClass in a) {
+        // TODO: Add a min space between classes
+        if ((tc.startTime < b.startTime && tc.endTime <= b.startTime) || (tc.startTime >= b.endTime && tc.endTime > b.endTime)) continue
+        msg += "${tc.code} ${intToTime(tc.startTime)} - ${intToTime(tc.endTime)}\n"
     }
-    return EachClass()
+    return if(msg.isEmpty()) msg
+    else "Clashing with classes :\n$msg"
 }
